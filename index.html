@@ -86,12 +86,10 @@ html:not(.js) .theme-btn { display: none; }
 
 /* hero */
 .hero { position: relative; padding-block: clamp(56px, 10vw, 116px) clamp(40px, 7vw, 76px); border-bottom: 1px solid var(--line); }
-.hero::before { content: ""; position: absolute; inset: 0 -10% 0 -10%; z-index: -1; pointer-events: none;
-  background: radial-gradient(28% 38% at 30% 42%, var(--glow), transparent 100%), radial-gradient(24% 34% at 74% 64%, var(--glow-ember), transparent 100%);
-  opacity: .45; }
-:root[data-intensity="loud"] .hero::before { opacity: 1; }
 .hero h1 { font-family: var(--display); font-weight: 800; font-stretch: 72%; font-size: clamp(2.7rem, 7.6vw, 5.8rem); line-height: .98; letter-spacing: -.01em; margin: 0; max-width: 14ch; text-wrap: balance; }
-.hero h1 em { font-style: normal; color: var(--pz-accent); text-shadow: 0 0 calc(var(--glow-size) * 1.6) var(--glow); }
+.hero h1 { isolation: isolate; }
+.hero h1 em { position: relative; font-style: normal; color: var(--pz-accent); text-shadow: 0 0 calc(var(--glow-size) * 1.6) var(--glow); }
+.hero h1 em::before { content: ""; position: absolute; inset: -45% -12%; z-index: -1; pointer-events: none; background: radial-gradient(closest-side, var(--glow), transparent); opacity: .7; }
 .hero p.lede { margin: 28px 0 0; max-width: 58ch; font-size: 1.1875rem; }
 .hero p.lede + p { margin: 14px 0 0; max-width: 58ch; color: var(--muted); }
 
@@ -99,7 +97,7 @@ html:not(.js) .theme-btn { display: none; }
 section.block { position: relative; display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 24px 40px; padding-block: 56px; border-bottom: 1px solid var(--line); }
 section.block::before { content: ""; position: absolute; left: calc(var(--node) / 2 - var(--trail-w) / 2); top: 0; bottom: 0; width: var(--trail-w);
   background: linear-gradient(var(--line), var(--line)); transition: background .6s; }
-section.block.lit::before, html:not(.lighting) section.block::before { background: linear-gradient(to bottom, color-mix(in srgb, var(--pz-accent) 55%, transparent), color-mix(in srgb, var(--pz-ember) 45%, transparent)); }
+section.block.lit::before, html:not(.lighting) section.block::before { background: color-mix(in srgb, var(--pz-accent) 55%, transparent); }
 :root[data-intensity="loud"] section.block.lit::before, :root[data-intensity="loud"]:not(.lighting) section.block::before { box-shadow: 0 0 var(--glow-size) var(--glow); }
 .label { position: relative; padding-left: calc(var(--node) + 16px); font: 500 .75rem/1.4 var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding-top: 8px; align-self: start; }
 .label span { display: block; color: var(--pz-ember); margin-bottom: 4px; }
@@ -141,7 +139,7 @@ p { margin: 0; }
 .chip { font: 500 .6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; padding: 6px 8px; border: 1px solid currentColor; border-radius: 3px; align-self: start; white-space: nowrap; }
 .chip.ok { color: var(--pz-accent); } .chip.wip { color: var(--pz-ember); } .chip.use { color: var(--pz-lilac); }
 .featured { position: relative; background: var(--raised); border: 1px solid var(--line); border-radius: 8px; padding: 28px; margin-bottom: 28px; display: grid; gap: 14px; transition: border-color .3s, box-shadow .3s; }
-.featured:hover { border-color: color-mix(in srgb, var(--pz-ember) 55%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--pz-ember) 25%, transparent), 0 10px 40px -18px var(--glow-ember); }
+.featured:hover { border-color: color-mix(in srgb, var(--pz-accent) 45%, var(--line)); box-shadow: 0 10px 40px -22px var(--glow); }
 .featured .kicker { font: 500 .75rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--pz-ember); }
 .featured h3 { font-size: clamp(1.5rem, 3vw, 2rem); font-stretch: 80%; }
 .featured p { max-width: 64ch; }
@@ -401,19 +399,33 @@ footer .gem { color: var(--pz-ember); }
   if(cb&&em)cb.addEventListener('click',function(){var v=em.textContent.trim();
     function fallback(){var r=document.createRange();r.selectNodeContents(em);var s=getSelection();s.removeAllRanges();s.addRange(r);toast('Selected - press Ctrl+C to copy');}
     try{navigator.clipboard.writeText(v).then(function(){toast('Email copied');},fallback);}catch(e){fallback();}});
-  if(!('IntersectionObserver' in window))return;
-  /* sticky index: highlight the section in view */
+  /* sticky index + scroll lighting, driven by one scroll handler so short sections still register */
   var links={};document.querySelectorAll('header.top nav a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a;});
-  var secs=document.querySelectorAll('section.block[id]');
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){Object.keys(links).forEach(function(k){links[k].removeAttribute('aria-current');});var a=links[e.target.id];if(a)a.setAttribute('aria-current','true');}});},{rootMargin:'-45% 0px -50% 0px'});
-  secs.forEach(function(s){io.observe(s);});
-  /* scroll lighting: each waypoint lights as you reach it */
-  if(root.getAttribute('data-lighting')!=='off'&&!reduce){root.classList.add('lighting');
-    var lo=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('lit');lo.unobserve(e.target);}});},{rootMargin:'0px 0px -35% 0px'});
-    secs.forEach(function(s){lo.observe(s);});}
+  var secs=[].slice.call(document.querySelectorAll('section.block[id]'));
+  var bar=document.querySelector('header.top'), lighting=!reduce;
+  if(lighting)root.classList.add('lighting');
+  var lock=null;
+  function setActive(id){Object.keys(links).forEach(function(k){if(k===id)links[k].setAttribute('aria-current','true');else links[k].removeAttribute('aria-current');});}
+  function update(){
+    var vh=innerHeight, line=(bar?bar.offsetHeight:0)+vh*0.3, active=null;
+    secs.forEach(function(sec){var top=sec.getBoundingClientRect().top;
+      if(top<=line)active=sec.id;
+      if(lighting&&top<=vh*0.55)sec.classList.add('lit');});
+    /* at the bottom of the page, the last sections can never reach the line: hand off to the last one */
+    if(scrollY+vh>=document.documentElement.scrollHeight-4)active=secs[secs.length-1].id;
+    if(lock)active=lock;
+    setActive(active);
+  }
+  var ticking=false;
+  addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(function(){ticking=false;update();});}},{passive:true});
+  addEventListener('resize',update);
+  /* a click on the index highlights that section right away, even if it is too short to reach the line */
+  Object.keys(links).forEach(function(k){links[k].addEventListener('click',function(){lock=k;setActive(k);clearTimeout(links[k]._t);links[k]._t=setTimeout(function(){lock=null;},900);});});
+  addEventListener('wheel',function(){lock=null;},{passive:true});addEventListener('touchstart',function(){lock=null;},{passive:true});
+  update();
   /* trail draw-in */
   var svg=document.querySelector('.trail-svg');
-  if(svg&&!reduce){svg.classList.add('pre');var so=new IntersectionObserver(function(es){if(es[0].isIntersecting){svg.getBoundingClientRect();svg.classList.add('drawn');svg.classList.remove('pre');so.disconnect();}},{threshold:.6});so.observe(svg);}
+  if(svg&&!reduce&&('IntersectionObserver' in window)){svg.classList.add('pre');var so=new IntersectionObserver(function(es){if(es[0].isIntersecting){svg.getBoundingClientRect();svg.classList.add('drawn');svg.classList.remove('pre');so.disconnect();}},{threshold:.6});so.observe(svg);}
 })();
 </script>
 </body>
