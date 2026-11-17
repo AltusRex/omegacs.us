@@ -222,7 +222,21 @@ html:not(.js) .backdrop { display: none; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
 /* site nav: small screens keep it on one line */
-@media (max-width: 520px) { .hide-sm { display: none; } header.top { gap: 8px; } header.top nav a { padding: 7px 7px; } .mark-name { display: none; } }
+@media (max-width: 600px) { .hide-sm { display: none; } }
+@media (max-width: 520px) { header.top { gap: 8px; flex-wrap: nowrap; } header.top nav { flex-wrap: nowrap; } header.top nav a { padding: 7px 7px; } .mark-name { display: none; } }
+@media (max-width: 360px) { header.top { gap: 4px; } header.top nav { gap: 0; } header.top nav a { padding: 7px 5px; letter-spacing: 0; } .tools { gap: 4px; } .icon-btn { padding: 0 7px; } }
+
+/* touch screens: give small inline links a finger-sized hit area without changing the layout */
+@media (pointer: coarse) {
+  .built-by a { padding-block: 5px; }
+  .page-head .feed { padding-block: 8px; }
+}
+
+/* Windows high contrast: keep the current page and section visible when backgrounds are dropped */
+@media (forced-colors: active) {
+  header.top nav a[aria-current] { outline: 1px solid; }
+  .rail a[aria-current] i { forced-color-adjust: none; background: Highlight; border-color: Highlight; }
+}
 
 /* margin index: a collapsed waypoint rail in the left margin that opens into labels */
 .rail { position: fixed; z-index: 6; font: 500 .8125rem/1 var(--mono); letter-spacing: .04em; }
@@ -254,13 +268,14 @@ html:not(.js) .rail { display: none; }
   .rail:not(:hover):not(:focus-within):not(.open) a span { width: 0; overflow: hidden; }
 }
 @media (max-width: 1239.98px) {
-  .rail { left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transition: opacity .3s, transform .3s; }
-  .rail.away:not(.open) { opacity: 0; transform: translateY(10px); pointer-events: none; }
+  .rail { left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transition: opacity .3s, transform .3s, visibility 0s; }
+  /* hidden over the hero, and tucked away while reading downward so it never sits on top of text; visibility keeps hidden links out of the tab order */
+  .rail.away:not(.open), .rail.tuck:not(.open):not(:focus-within) { opacity: 0; transform: translateY(10px); pointer-events: none; visibility: hidden; transition: opacity .3s, transform .3s, visibility 0s .3s; }
   .rail-toggle { height: 44px; min-width: 44px; padding: 0 12px; border-radius: 22px; box-shadow: 0 8px 24px -12px rgba(0,0,0,.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   .rail-toggle .rail-num { color: var(--pz-accent); }
   .rail-toggle svg { transform: rotate(-90deg); } .rail.open .rail-toggle svg { transform: rotate(90deg); }
-  .rail ol { position: absolute; left: 0; bottom: 54px; min-width: 200px; padding: 6px; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 40px -16px rgba(0,0,0,.6); opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .2s, transform .2s; }
-  .rail.open ol { opacity: 1; transform: none; pointer-events: auto; }
+  .rail ol { position: absolute; left: 0; bottom: 54px; min-width: 200px; padding: 6px; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 40px -16px rgba(0,0,0,.6); opacity: 0; transform: translateY(8px); pointer-events: none; visibility: hidden; transition: opacity .2s, transform .2s, visibility 0s .2s; }
+  .rail.open ol { opacity: 1; transform: none; pointer-events: auto; visibility: visible; transition-delay: 0s; }
   .rail a { padding: 10px 12px; }
 }
 
@@ -326,3 +341,10 @@ html:not(.js) .rail { display: none; }
 .repo-link svg { width: 13px; height: 13px; }
 @media (max-width: 760px) { .cards { grid-template-columns: minmax(0, 1fr); } .post-list a { grid-template-columns: minmax(0, 1fr); } }
 footer abbr { text-decoration: none; }
+
+/* browsers without color-mix (Safari before 16.2, Firefox before 113): solid fills so the sticky header and floating index never go see-through */
+@supports not (color: color-mix(in srgb, red 50%, transparent)) {
+  header.top { background: var(--bg); }
+  .rail-toggle, .rail:hover ol, .rail:focus-within ol, .rail.open ol { background: var(--raised); }
+  header.top nav a[aria-current] { background: var(--raised); }
+}
