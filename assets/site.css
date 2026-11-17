@@ -348,3 +348,8 @@ footer abbr { text-decoration: none; }
   .rail-toggle, .rail:hover ol, .rail:focus-within ol, .rail.open ol { background: var(--raised); }
   header.top nav a[aria-current] { background: var(--raised); }
 }
+
+/* skip link: hidden until a keyboard user tabs to it */
+.skip { position: absolute; left: 12px; top: -60px; z-index: 20; padding: 10px 14px; border-radius: 6px; background: var(--pz-fill); color: var(--pz-on-fill); font: 600 .875rem/1 var(--body); text-decoration: none; transition: top .15s; }
+.skip:focus { top: 12px; }
+main:focus { outline: none; }
