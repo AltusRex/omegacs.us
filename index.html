@@ -200,20 +200,18 @@ footer .gem { color: var(--pz-ember); }
 .stats-note { font: 400 .75rem/1.4 var(--mono); color: var(--muted); }
 
 /* principles linked to the work that shows them */
-.rules li.has-links { position: relative; }
-.rule-btn { justify-self: start; margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; border: 0; background: none; color: var(--pz-accent); font: 500 .75rem/1.2 var(--mono); letter-spacing: .04em; cursor: pointer; }
-.rule-btn::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid currentColor; transition: background-color .2s; }
-.rule-btn[aria-expanded="true"]::before { background: currentColor; box-shadow: 0 0 8px var(--glow); }
-.rule-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-.rule-links[hidden] { display: none; }
-.rule-links a { font: 500 .75rem/1 var(--mono); padding: 6px 8px; border-radius: 4px; text-decoration: none; color: var(--ink); background: color-mix(in srgb, var(--pz-accent) 12%, transparent); border: 1px solid color-mix(in srgb, var(--pz-accent) 35%, transparent); }
-.rule-links a:hover { border-color: var(--pz-accent); }
-.built-by { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 4px 10px; font: 500 .6875rem/1.4 var(--mono); letter-spacing: .04em; color: var(--muted); }
-.built-by a { color: var(--muted); text-decoration: none; border-bottom: 1px dotted currentColor; }
-.built-by a:hover, .built-by a.on { color: var(--pz-accent); }
+.rule-links { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+.rl-label { font: 500 .6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-right: 2px; }
+.rule-links a { display: inline-flex; align-items: center; gap: 5px; font: 500 .75rem/1 var(--mono); padding: 6px 8px; border-radius: 4px; text-decoration: none; color: var(--pz-accent); border: 1px solid color-mix(in srgb, var(--pz-accent) 35%, transparent); transition: background-color .2s, border-color .2s; }
+.rule-links a i { font-style: normal; font-size: .7rem; opacity: .8; transition: transform .2s; }
+.rule-links a:hover, .rule-links a:focus-visible { border-color: var(--pz-accent); background: color-mix(in srgb, var(--pz-accent) 12%, transparent); }
+.rule-links a:hover i { transform: translate(1px, 1px); }
+.built-by { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font: 500 .6875rem/1.4 var(--mono); letter-spacing: .04em; color: var(--muted); }
+.built-by span { text-transform: uppercase; letter-spacing: .08em; }
+.built-by a { color: var(--pz-accent); text-decoration: none; border-bottom: 1px dotted currentColor; }
+.built-by a:hover { border-bottom-style: solid; }
 .item, .featured { scroll-margin-top: 90px; transition: box-shadow .4s, background-color .4s; }
-.item.match { box-shadow: -14px 0 0 -12px var(--pz-accent); }
-.item.flash, .featured.flash, .rules li.flash { background: color-mix(in srgb, var(--pz-accent) 7%, transparent); }
+.item.flash, .featured.flash, .rules li.flash { background: color-mix(in srgb, var(--pz-accent) 8%, transparent); box-shadow: -14px 0 0 -12px var(--pz-accent); }
 
 /* background layer: one faint full-page canvas whose scene follows the section */
 .backdrop { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: .13; }
@@ -561,29 +559,26 @@ html:not(.js) .backdrop { display: none; }
   /* ---------- principles linked to the work that shows them ---------- */
   var RULES={simple:['p-rewire','p-guide','p-firewall'],variance:['w-skills','w-mapper','w-agents'],search:['p-vexp','p-firewall','p-rewire','p-preserve'],nudge:['w-skills'],same:['w-skills','w-mapper'],readonly:['w-connectors','w-agents'],accuracy:['w-mapper','p-game','p-vexp'],maintainer:['p-guide','w-agents','w-connectors','p-vexp']};
   var SHORT={'w-skills':'Process skills','w-connectors':'Read-only connectors','w-agents':'Agent fleet','w-mapper':'Config mapper','p-game':'The game','p-rewire':'Rewire','p-vexp':'vexp bug hunt','p-firewall':'Home firewall','p-preserve':'Game preservation','p-guide':'Flash guide'};
-  var ruleName={},open=null;
-  function flash(el){el.classList.add('flash');setTimeout(function(){el.classList.remove('flash');},1500);}
-  function setRule(key){
-    open=open===key?null:key;
-    document.querySelectorAll('.rules li[data-rule]').forEach(function(li){var on=li.getAttribute('data-rule')===open;li.querySelector('.rule-btn').setAttribute('aria-expanded',on);li.querySelector('.rule-links').hidden=!on;});
-    Object.keys(SHORT).forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle('match',!!open&&RULES[open].indexOf(id)>-1);});
-    document.querySelectorAll('.built-by a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-rule')===open);});
-  }
+  var ruleName={};
+  function flash(el){el.classList.add('flash');setTimeout(function(){el.classList.remove('flash');},1600);}
+  function jump(el,block){el.scrollIntoView({behavior:reduce?'auto':'smooth',block:block});setTimeout(function(){flash(el);},reduce?0:450);}
+  /* under each rule: the work where it shows, as plain links that jump to it */
   document.querySelectorAll('.rules li[data-rule]').forEach(function(li){
     var key=li.getAttribute('data-rule'),ids=RULES[key]||[];ruleName[key]=li.querySelector('b').textContent.replace(/\.$/,'');
-    var b=document.createElement('button');b.type='button';b.className='rule-btn';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','rl-'+key);
-    b.textContent='Shows up in '+(ids.length===1?'one place':ids.length+' places');
-    var box=document.createElement('div');box.className='rule-links';box.id='rl-'+key;box.hidden=true;
-    ids.forEach(function(id){var a=document.createElement('a');a.href='#'+id;a.textContent=SHORT[id];a.addEventListener('click',function(){var el=document.getElementById(id);if(el)setTimeout(function(){flash(el);},350);});box.appendChild(a);});
-    b.addEventListener('click',function(){setRule(key);});
-    li.classList.add('has-links');li.appendChild(b);li.appendChild(box);
+    if(!ids.length)return;
+    var box=document.createElement('div');box.className='rule-links';
+    var lab=document.createElement('span');lab.className='rl-label';lab.textContent='See it in';box.appendChild(lab);
+    ids.forEach(function(id){var a=document.createElement('a');a.href='#'+id;a.innerHTML='<span></span><i aria-hidden="true">&#8600;</i>';a.firstChild.textContent=SHORT[id];
+      a.addEventListener('click',function(ev){var el=document.getElementById(id);if(!el)return;ev.preventDefault();jump(el,'start');});box.appendChild(a);});
+    li.appendChild(box);
   });
+  /* on each project: the rules it was built by, linking back up */
   Object.keys(SHORT).forEach(function(id){
     var el=document.getElementById(id);if(!el)return;
     var keys=Object.keys(RULES).filter(function(k){return RULES[k].indexOf(id)>-1;});if(!keys.length)return;
-    var row=document.createElement('div');row.className='built-by';row.appendChild(document.createTextNode('Built by'));
-    keys.forEach(function(k){var a=document.createElement('a');a.href='#thinking';a.setAttribute('data-rule',k);a.textContent=ruleName[k];
-      a.addEventListener('click',function(ev){ev.preventDefault();if(open!==k)setRule(k);var li=document.querySelector('.rules li[data-rule="'+k+'"]');li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});setTimeout(function(){flash(li);},350);});
+    var row=document.createElement('div');row.className='built-by';var lb=document.createElement('span');lb.textContent='Built by';row.appendChild(lb);
+    keys.forEach(function(k){var a=document.createElement('a');a.href='#thinking';a.textContent=ruleName[k];
+      a.addEventListener('click',function(ev){ev.preventDefault();jump(document.querySelector('.rules li[data-rule="'+k+'"]'),'center');});
       row.appendChild(a);});
     var h=el.querySelector('h3'),after=el.classList.contains('item')?h.nextElementSibling:h;after.insertAdjacentElement('afterend',row);
   });
