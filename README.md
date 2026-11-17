@@ -1,5 +1,7 @@
 # omegacs.us
 
+Omega Creative Systems (OmegaCS) - the name Joseph Landry publishes his own work under.
+
 Personal site for Joseph Landry, served by GitHub Pages from the `main` branch. Pages runs Jekyll on every push, so a merge to `main` is a deploy.
 
 ## Files

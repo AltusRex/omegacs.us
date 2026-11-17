@@ -323,3 +323,4 @@ html:not(.js) .rail { display: none; }
 .repo-link { display: inline-flex; align-items: center; gap: 6px; font: 500 .75rem/1 var(--mono); letter-spacing: .04em; color: var(--pz-accent); text-decoration: none; border-bottom: 1px dotted currentColor; padding-bottom: 2px; }
 .repo-link svg { width: 13px; height: 13px; }
 @media (max-width: 760px) { .cards { grid-template-columns: minmax(0, 1fr); } .post-list a { grid-template-columns: minmax(0, 1fr); } }
+footer abbr { text-decoration: none; }
