@@ -557,7 +557,8 @@ html:not(.js) .backdrop { display: none; }
   }
 
   /* ---------- principles linked to the work that shows them ---------- */
-  var RULES={simple:['p-rewire','p-guide','p-firewall'],variance:['w-skills','w-mapper','w-agents'],search:['p-vexp','p-firewall','p-rewire','p-preserve'],nudge:['w-skills'],same:['w-skills','w-mapper'],readonly:['w-connectors','w-agents'],accuracy:['w-mapper','p-game','p-vexp'],maintainer:['p-guide','w-agents','w-connectors','p-vexp']};
+  /* one clear example per rule, only where the item's own text shows it; rules without one stay unlinked */
+  var RULES={search:['p-vexp'],same:['w-skills'],readonly:['w-connectors'],accuracy:['w-mapper'],maintainer:['p-guide']};
   var SHORT={'w-skills':'Process skills','w-connectors':'Read-only connectors','w-agents':'Agent fleet','w-mapper':'Config mapper','p-game':'The game','p-rewire':'Rewire','p-vexp':'vexp bug hunt','p-firewall':'Home firewall','p-preserve':'Game preservation','p-guide':'Flash guide'};
   var ruleName={};
   function flash(el){el.classList.add('flash');setTimeout(function(){el.classList.remove('flash');},1600);}
