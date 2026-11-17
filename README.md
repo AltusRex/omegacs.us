@@ -13,3 +13,4 @@ Personal site for Joseph Landry. Plain static HTML, served by GitHub Pages from 
 3. Employer, client and internal tool specifics stay generic or stay out (non-compete and IP). No employer name, client names, internal tool names or screenshots of work systems.
 4. Personal projects (Rewire, home lab, game preservation) are his to describe, but don't name specific commercial games without his OK.
 5. Keep it one file until there's a real reason not to. Simple beats clever.
+6. Taglines: commit messages and PR descriptions end with "Maintained with Claude" (not "Generated with Claude Code"). The site footer uses the same wording.
