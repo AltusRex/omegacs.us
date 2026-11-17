@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<article class="post">
+  <header class="page-head">
+    <a class="kicker" href="{{ '/blog/' | relative_url }}" style="text-decoration:none">Blog</a>
+    <h1>{{ page.title | escape }}</h1>
+    {% if page.description %}<p>{{ page.description | escape }}</p>{% endif %}
+    {% assign words = content | number_of_words %}{% assign minutes = words | divided_by: 220 | at_least: 1 %}
+    <div class="meta"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time><span>{{ minutes }} min read</span></div>
+    {% if page.tags.size > 0 %}<div class="tags">{% for t in page.tags %}<span>{{ t }}</span>{% endfor %}</div>{% endif %}
+  </header>
+  <div class="prose">
+{{ content }}
+  </div>
+  {% if page.previous or page.next %}
+  <nav class="post-nav" aria-label="More posts">
+    {% if page.previous %}<a href="{{ page.previous.url | relative_url }}"><small>Older</small><span>{{ page.previous.title | escape }}</span></a>{% endif %}
+    {% if page.next %}<a href="{{ page.next.url | relative_url }}"><small>Newer</small><span>{{ page.next.title | escape }}</span></a>{% endif %}
+  </nav>
+  {% endif %}
+</article>

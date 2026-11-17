@@ -1,0 +1,25 @@
+---
+layout: default
+nav: portfolio
+title: Portfolio
+description: The projects I build on my own time, with links to the repositories I've made public.
+---
+<header class="page-head">
+  <span class="kicker">Portfolio</span>
+  <h1>My projects, <em>in one place</em></h1>
+  <p>Some of these repositories are public and some are still private while I decide what's ready to share. Anything with a GitHub link is open to read.</p>
+</header>
+
+<div class="cards">
+  {% for p in site.data.projects %}
+  <article class="card" id="{{ p.id }}">
+    <div class="top-row"><span class="kicker">{{ p.kicker }}</span><span class="chip {{ p.chip }}">{{ p.status }}</span></div>
+    <h2>{{ p.name }}</h2>
+    <p>{{ p.summary }}</p>
+    <div class="links">
+      {% if p.public and p.repo %}<a class="btn" href="{{ p.repo }}" target="_blank" rel="noopener">{% include icon-github.html %}View on GitHub</a>
+      {% else %}<span class="private"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Private for now</span>{% endif %}
+    </div>
+  </article>
+  {% endfor %}
+</div>

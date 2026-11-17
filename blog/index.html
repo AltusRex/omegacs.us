@@ -1,0 +1,29 @@
+---
+layout: default
+nav: blog
+title: Blog
+description: Notes from building things with AI - what worked, what broke, and what I'd do differently.
+---
+<header class="page-head">
+  <span class="kicker">Blog</span>
+  <h1>Notes from <em>the build</em></h1>
+  <p>What worked, what broke, and what I'd do differently next time.</p>
+  <a class="feed" href="{{ '/blog/feed.xml' | relative_url }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor"/></svg>RSS feed</a>
+</header>
+
+{% if site.posts.size > 0 %}
+<ol class="post-list">
+  {% for post in site.posts %}
+  <li><a href="{{ post.url | relative_url }}">
+    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+    <div>
+      <h2>{{ post.title | escape }}</h2>
+      <p>{{ post.description | default: post.excerpt | strip_html | truncate: 200 }}</p>
+      {% if post.tags.size > 0 %}<div class="tags">{% for t in post.tags %}<span>{{ t }}</span>{% endfor %}</div>{% endif %}
+    </div>
+  </a></li>
+  {% endfor %}
+</ol>
+{% else %}
+<p class="empty"><b>Nothing posted yet.</b> The first one is in the works.</p>
+{% endif %}
