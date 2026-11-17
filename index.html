@@ -590,8 +590,9 @@ html:not(.js) .backdrop { display: none; }
 
   /* ---------- background layer: a faint full-page scene that follows the section ---------- */
   var cv=document.getElementById('backdrop');if(!cv)return;
-  var ctx=cv.getContext('2d'),W=0,H=0,C={},A=1;
-  function size(){W=innerWidth;H=innerHeight;cv.width=W;cv.height=H;}
+  var ctx=cv.getContext('2d'),W=0,H=0,PL=0,C={},A=1,prose=document.querySelector('section.block > div:last-child');
+  /* PL is where the reading column starts, so scenes can sit in the open space to its left */
+  function size(){W=innerWidth;H=innerHeight;cv.width=W;cv.height=H;PL=prose?prose.getBoundingClientRect().left:W*.3;}
   function readColors(){var cs=getComputedStyle(root);['--pz-accent','--pz-ember','--pz-lilac','--ink','--muted'].forEach(function(v){C[v.replace('--pz-','').replace('--','')]=cs.getPropertyValue(v).trim();});}
   function rgba(hex,a){var h=hex.replace('#','');if(h.length===3)h=h.replace(/./g,'$&$&');var v=parseInt(h,16);return 'rgba('+(v>>16&255)+','+(v>>8&255)+','+(v&255)+','+Math.max(0,Math.min(1,a*A))+')';}
   function hash(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x);}
@@ -613,7 +614,7 @@ html:not(.js) .backdrop { display: none; }
   function route(pts,t,speed){var L=[],tot=0;for(var i=1;i<pts.length;i++){var l=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);L.push(l);tot+=l;}
     var s=(t*speed)%(tot*2);if(s>tot)s=tot*2-s;for(var j=0;j<L.length;j++){if(s<=L[j]){var k=s/L[j];return [pts[j][0]+(pts[j+1][0]-pts[j][0])*k,pts[j][1]+(pts[j+1][1]-pts[j][1])*k];}s-=L[j];}return pts[pts.length-1];}
   function world(t){
-    var N=12;iso.tw=Math.min(W*.8,H*1.3)/N;iso.th=iso.tw/2;iso.ox=W/2;iso.oy=H/2-N*iso.th/2+iso.th*.6;
+    var N=12;iso.tw=Math.min(W*.55,H*1.05)/N;iso.th=iso.tw/2;iso.ox=Math.max(PL-160,W*.2);iso.oy=H/2-N*iso.th/2+iso.th*.6;
     var day=.5+.5*Math.sin(t/45*6.2832);
     // ground tiles
     for(var gx=0;gx<N;gx++)for(var gy=0;gy<N;gy++){var road=(gy===5||gx===4)&&!(gx>9&&gy!==5);
@@ -622,16 +623,16 @@ html:not(.js) .backdrop { display: none; }
       {x:1,y:1,draw:function(){isoBox(1.2,1.2,1.6,1.6,1,C.muted,C.ink,C.muted);roof(1.2,1.2,1.6,1.6,1,.9,C.lilac);winL(1.2,1.2,1.6,1.6,.45);}},
       {x:1,y:7,draw:function(){isoBox(1.2,7.2,1.6,1.6,1,C.muted,C.ink,C.muted);roof(1.2,7.2,1.6,1.6,1,.9,C.lilac);winL(1.2,7.2,1.6,1.6,.45);}},
       {x:2,y:9.5,draw:function(){isoBox(2.2,9.6,1.4,1.4,.9,C.muted,C.ink,C.muted);roof(2.2,9.6,1.4,1.4,.9,.8,C.lilac);winL(2.2,9.6,1.4,1.4,.4);}},
-      {x:6,y:1.5,draw:function(){isoBox(6,1.5,2.4,2,1.2,C.muted,C.ink,C.muted);isoBox(7.7,1.7,.5,.5,2.4,C.muted,C.ink,C.muted);
-        var f=P(7.2,3.5,.35),heat=.6+.4*Math.sin(t*4)*Math.sin(t*1.7);glow(f[0],f[1],iso.tw*.9,C.ember,.8*heat);}},
+      {x:1,y:3.1,draw:function(){isoBox(1,3.1,2.4,1.8,1.2,C.muted,C.ink,C.muted);isoBox(1.2,3.3,.5,.5,2.4,C.muted,C.ink,C.muted);
+        var f=P(2.2,4.9,.35),heat=.6+.4*Math.sin(t*4)*Math.sin(t*1.7);glow(f[0],f[1],iso.tw*.9,C.ember,.8*heat);}},
       {x:6,y:6.3,draw:function(){isoBox(6,6.3,2.6,1.6,.55,C.lilac,C.ink,C.muted);isoBox(6.4,6.6,.5,.5,.85,C.ember,C.ink,C.muted);isoBox(7.3,6.7,.5,.5,.8,C.accent,C.ink,C.muted);}},
-      {x:9,y:8.6,draw:function(){tree(9.6,9.2);}},{x:3,y:3.6,draw:function(){tree(3.3,3.4);}},{x:9.6,y:2.4,draw:function(){tree(10,2.6);}},{x:5,y:9.6,draw:function(){tree(5.6,10.2);}}
+      {x:9,y:8.6,draw:function(){tree(9.6,9.2);}},{x:3.6,y:2.2,draw:function(){tree(3.6,2.2);}},{x:9.6,y:2.4,draw:function(){tree(10,2.6);}},{x:5,y:9.6,draw:function(){tree(5.6,10.2);}}
     ];
     function winL(x,y,w,d,h){var a=.25+.75*(1-day),p=P(x+w*.45,y+d,h*.55);ctx.fillStyle=rgba(C.ember,a);ctx.fillRect(p[0]-iso.tw*.06,p[1]-iso.th*.12,iso.tw*.12,iso.th*.24);}
     function tree(x,y){var b=P(x,y,0),top=P(x,y,1.3);stroke(C.muted,.9,Math.max(1,iso.tw*.04));ctx.beginPath();ctx.moveTo(b[0],b[1]);ctx.lineTo(top[0],top[1]+iso.th*.3);ctx.stroke();dot(top[0],top[1],iso.tw*.28,C.accent,.55);}
     // walkers on the roads, drawn in depth order with the buildings
     var walkers=[
-      {pts:[[2,3.2],[4.5,3.2],[4.5,5.5],[6.2,5.5],[6.2,3.6]],sp:.35,c:C.ember},
+      {pts:[[2.2,2.95],[3.9,2.95],[3.9,4.3],[3.55,4.3]],sp:.3,c:C.ember},
       {pts:[[8.8,5.5],[11.8,5.5]],sp:.25,c:C.accent,carry:true},
       {pts:[[3,9.4],[4.5,9.4],[4.5,5.5],[6.4,5.5],[6.4,6.1]],sp:.3,c:C.lilac},
       {pts:[[2,6.9],[4.5,6.9],[4.5,0.5]],sp:.22,c:C.ink}
@@ -641,7 +642,7 @@ html:not(.js) .backdrop { display: none; }
       dot(b[0],b[1]-iso.th*.78-bob,iso.tw*.07,w.c,1);if(w.carry){ctx.fillStyle=rgba(C.ember,.9);ctx.fillRect(b[0]+iso.tw*.04,b[1]-iso.th*.62-bob,iso.tw*.1,iso.th*.2);}}});});
     things.sort(function(a,b){return (a.x+a.y)-(b.x+b.y);}).forEach(function(o){o.draw();});
     // chimney smoke
-    for(var s=0;s<6;s++){var a=(t*.25+s/6)%1,c=P(7.95+a*.4,1.95-a*.3,2.5+a*2.2);dot(c[0],c[1],iso.tw*(.08+a*.18),C.muted,.5*(1-a));}
+    for(var s=0;s<6;s++){var a=(t*.25+s/6)%1,c=P(1.45+a*.4,3.55-a*.3,2.5+a*2.2);dot(c[0],c[1],iso.tw*(.08+a*.18),C.muted,.5*(1-a));}
     // night sky motes
     for(var m=0;m<26;m++)dot(hash(m)*W,hash(m+40)*H*.35,1.2,C.ink,(1-day)*(.5+.4*Math.sin(t*1.5+m)));
   }
@@ -684,12 +685,12 @@ html:not(.js) .backdrop { display: none; }
         for(var x=0;x<=W;x+=8){var y=base+Math.sin(x*.006+t*.2+i*1.1)*16+Math.sin(x*.017-t*.12+i)*6;x?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();}
     },
     contact:function(t){
-      var cx=W*.78,cy=H*.48,f=.8+.2*Math.sin(t*2.1)*Math.sin(t*1.3);
+      var cx=Math.max(PL*.55,W*.12),cy=H*.48,f=.8+.2*Math.sin(t*2.1)*Math.sin(t*1.3);
       stroke(C.muted,.9,1.5);ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,cy-46);ctx.stroke();
       glow(cx,cy,H*.45*f,C.accent,.35);
       poly([[cx-16,cy-44],[cx+16,cy-44],[cx+22,cy-28],[cx+22,cy+26],[cx-22,cy+26],[cx-22,cy-28]],null,rgba(C.muted,1));
       glow(cx,cy,30,C.ember,.9*f);dot(cx,cy+2,5,C.accent,f);
-      for(var i=0;i<26;i++){var a=t*(.05+hash(i)*.08)+i,r=H*(.12+hash(i+20)*.4),x=cx+Math.cos(a)*r*1.4,y=cy+Math.sin(a)*r,b=Math.max(0,Math.sin(t*.9+i*2.1));glow(x,y,16,C.accent,.6*b);dot(x,y,2,C.accent,.4+.6*b);}
+      for(var i=0;i<26;i++){var a=t*(.05+hash(i)*.08)+i,r=H*(.12+hash(i+20)*.4),x=cx+Math.cos(a)*r*.9,y=cy+Math.sin(a)*r,b=Math.max(0,Math.sin(t*.9+i*2.1));glow(x,y,16,C.accent,.6*b);dot(x,y,2,C.accent,.4+.6*b);}
     }
   };
 
