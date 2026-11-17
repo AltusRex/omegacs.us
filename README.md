@@ -1,5 +1,9 @@
 # omegacs.us
 
+Omega Creative Systems (OmegaCS) - the name Joseph Landry publishes his own work under.
+
+The mark is an omega built from his initials, JLII: the J and the L are the legs, their upturned feet are the base of a Roman numeral II, and the flattened o on top is left open so the whole thing is one line. The tab icon (`assets/icons/favicon.svg`) is the same shape cut out of the lime tile; the share image is `assets/og.png`.
+
 Personal site for Joseph Landry, served by GitHub Pages from the `main` branch. Pages runs Jekyll on every push, so a merge to `main` is a deploy.
 
 ## Files

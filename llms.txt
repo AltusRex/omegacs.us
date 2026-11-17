@@ -1,6 +1,6 @@
-# omegacs.us
+# omegacs.us - Omega Creative Systems
 
-> Joseph Landry is a systems administrator who uses AI to build tools, agent fleets and home-lab projects. He writes the spec, AI writes most of the code, and he tests it on real data. This file summarizes the public site for AI readers.
+> Joseph Landry is a systems administrator who uses AI to build tools, agent fleets and home-lab projects. He writes the spec, AI writes most of the code, and he tests it on real data. OmegaCS stands for Omega Creative Systems, the name he publishes his own work under. This file summarizes the public site for AI readers.
 
 ## How he works
 - Simple beats clever. Low variance. Search before you build.

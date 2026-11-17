@@ -50,7 +50,9 @@ header.top {
   font: 500 .8125rem/1 var(--mono); letter-spacing: .04em;
 }
 .mark { color: var(--ink); font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
-.mark i { width: 9px; height: 9px; border-radius: 50%; background: var(--pz-accent); box-shadow: 0 0 var(--glow-size) var(--glow); }
+.mark .omega { color: var(--pz-accent); flex: none; filter: drop-shadow(0 0 calc(var(--glow-size) * .6) var(--glow)); }
+.foot-mark { display: inline-flex; align-items: center; gap: 8px; }
+.foot-mark .omega { color: var(--pz-accent); flex: none; }
 header.top nav { display: flex; gap: 4px; flex-wrap: wrap; }
 header.top nav a { color: var(--muted); text-decoration: none; padding: 7px 9px; border-radius: 5px; transition: color .2s, background-color .2s; }
 header.top nav a:hover { color: var(--ink); }
@@ -220,7 +222,7 @@ html:not(.js) .backdrop { display: none; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
 /* site nav: small screens keep it on one line */
-@media (max-width: 520px) { .hide-sm { display: none; } header.top { gap: 8px; } header.top nav a { padding: 7px 7px; } .mark { font-size: 0; gap: 0; } .mark::after { content: "JL"; font-size: .8125rem; margin-left: 8px; } }
+@media (max-width: 520px) { .hide-sm { display: none; } header.top { gap: 8px; } header.top nav a { padding: 7px 7px; } .mark-name { display: none; } }
 
 /* margin index: a collapsed waypoint rail in the left margin that opens into labels */
 .rail { position: fixed; z-index: 6; font: 500 .8125rem/1 var(--mono); letter-spacing: .04em; }
@@ -323,3 +325,4 @@ html:not(.js) .rail { display: none; }
 .repo-link { display: inline-flex; align-items: center; gap: 6px; font: 500 .75rem/1 var(--mono); letter-spacing: .04em; color: var(--pz-accent); text-decoration: none; border-bottom: 1px dotted currentColor; padding-bottom: 2px; }
 .repo-link svg { width: 13px; height: 13px; }
 @media (max-width: 760px) { .cards { grid-template-columns: minmax(0, 1fr); } .post-list a { grid-template-columns: minmax(0, 1fr); } }
+footer abbr { text-decoration: none; }
