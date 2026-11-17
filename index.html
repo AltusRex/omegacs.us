@@ -6,143 +6,210 @@
 <title>Joseph Landry · omegacs.us</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Joseph Landry is a systems administrator who uses AI to build tools, agents and home-lab projects that one person usually doesn't get to build.">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#14101d" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f8f5fb" media="(prefers-color-scheme: light)">
+<meta name="pizzazz-recipe" content='{"pz":1,"kit":"my-color-profile","concept":"Wisp Trail","family":"wildcard","dev":{"intensity":"standard","motion":"scroll lighting","interactivity":"sticky index, theme toggle, copy email"},"sig":"glowing waypoint trail","pal":{"pri":"#EFE9F7","sec":"#FFAA4D","tint":"#1C1727","zeb":"#1C1727","mut":"#A79CBB","ftr":"#A79CBB","hair":"#2A2236","acc":"#C6F02A","watch":"#FFAA4D"},"font":{"h":"Archivo","b":"IBM Plex Sans"},"date":"2026-11-17"}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<script>
+/* Apply a saved theme choice before paint; the system setting decides otherwise. */
+(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}document.documentElement.classList.add('js');})();
+</script>
 <style>
-/* Layout: one reading column with a mono label gutter on the left, like port labels on a patch panel. */
+/* Layout: one reading column with a glowing waypoint trail down the left gutter; each section is a stop on the trail. Dark-first (Mire Lantern). */
 :root {
-  --paper: #f2f4f3;
-  --raised: #fafbfa;
-  --ink: #17201c;
-  --muted: #56625c;
-  --line: #d3d9d6;
-  --accent: #2747c8;
-  --accent-soft: #e3e8fb;
-  --ok: #1f7a4a;
-  --warn: #9a5b00;
+  --bg: #14101d; --raised: #1c1727; --ink: #efe9f7; --muted: #a79cbb; --line: #2a2236;
+  --pz-accent: #c6f02a; --pz-fill: #c6f02a; --pz-on-fill: #14101d;
+  --pz-ember: #ffaa4d; --pz-lilac: #b9a6ff;
+  --glow: rgba(198, 240, 42, .28); --glow-ember: rgba(255, 170, 77, .22);
   --display: "Archivo", "Arial Narrow", Arial, sans-serif;
   --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --glow-size: 10px; --node: 13px; --trail-w: 2px;
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #111513; --raised: #171c19; --ink: #e4e9e6; --muted: #95a29b; --line: #29312d;
-    --accent: #93a6ff; --accent-soft: #1c2342; --ok: #6cc596; --warn: #e0a75a; color-scheme: dark;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f8f5fb; --raised: #fffdff; --ink: #1a1424; --muted: #5c5170; --line: #e4dcec;
+    --pz-accent: #4d6b00; --pz-ember: #9c4a00; --pz-lilac: #5b3fb0;
+    --glow: rgba(110, 160, 0, .22); --glow-ember: rgba(156, 74, 0, .14);
+    color-scheme: light;
   }
 }
-:root[data-theme="dark"] {
-  --paper: #111513; --raised: #171c19; --ink: #e4e9e6; --muted: #95a29b; --line: #29312d;
-  --accent: #93a6ff; --accent-soft: #1c2342; --ok: #6cc596; --warn: #e0a75a; color-scheme: dark;
+:root[data-theme="light"] {
+  --bg: #f8f5fb; --raised: #fffdff; --ink: #1a1424; --muted: #5c5170; --line: #e4dcec;
+  --pz-accent: #4d6b00; --pz-ember: #9c4a00; --pz-lilac: #5b3fb0;
+  --glow: rgba(110, 160, 0, .22); --glow-ember: rgba(156, 74, 0, .14);
+  color-scheme: light;
 }
+:root[data-intensity="loud"] { --glow-size: 22px; --node: 16px; --trail-w: 3px; }
+
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
-  margin: 0; background: var(--paper); color: var(--ink);
+  margin: 0; background: var(--bg); color: var(--ink); overflow-x: clip;
   font: 400 1.0625rem/1.65 var(--body);
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-a { color: var(--accent); text-underline-offset: 3px; }
-a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
-.wrap { max-width: 1040px; margin: 0 auto; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: var(--pz-accent); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--pz-accent); outline-offset: 3px; border-radius: 3px; }
+.wrap { max-width: 1060px; margin: 0 auto; }
 
-header.top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-block: 28px 0; font: 500 .8125rem/1 var(--mono); letter-spacing: .04em; color: var(--muted); }
-header.top nav { display: flex; gap: 20px; flex-wrap: wrap; }
-header.top a { color: var(--muted); text-decoration: none; }
-header.top a:hover { color: var(--accent); }
-.mark { color: var(--ink); font-weight: 500; }
-
-.hero { padding-block: clamp(56px, 10vw, 112px) clamp(40px, 7vw, 72px); border-bottom: 1px solid var(--line); }
-.hero h1 {
-  font-family: var(--display); font-weight: 800; font-stretch: 72%;
-  font-size: clamp(2.6rem, 7.4vw, 5.6rem); line-height: .98; letter-spacing: -.01em;
-  margin: 0; max-width: 15ch; text-wrap: balance;
+/* sticky index */
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap;
+  padding-block: 14px; background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  font: 500 .8125rem/1 var(--mono); letter-spacing: .04em;
 }
-.hero h1 em { font-style: normal; color: var(--accent); }
-.hero p.lede { margin: 28px 0 0; max-width: 58ch; font-size: 1.1875rem; color: var(--ink); }
+.mark { color: var(--ink); font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+.mark i { width: 9px; height: 9px; border-radius: 50%; background: var(--pz-accent); box-shadow: 0 0 var(--glow-size) var(--glow); }
+header.top nav { display: flex; gap: 4px; flex-wrap: wrap; }
+header.top nav a { color: var(--muted); text-decoration: none; padding: 7px 9px; border-radius: 5px; transition: color .2s, background-color .2s; }
+header.top nav a:hover { color: var(--ink); }
+header.top nav a[aria-current="true"] { color: var(--pz-accent); background: color-mix(in srgb, var(--pz-accent) 12%, transparent); }
+.tools { display: flex; gap: 6px; align-items: center; }
+.icon-btn { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--muted); font: inherit; cursor: pointer; text-decoration: none; transition: color .2s, border-color .2s; }
+.icon-btn:hover { color: var(--ink); border-color: var(--muted); }
+.icon-btn svg { width: 15px; height: 15px; }
+.theme-btn .sun { display: none; }
+:root[data-theme="light"] .theme-btn .sun { display: block; } :root[data-theme="light"] .theme-btn .moon { display: none; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .theme-btn .sun { display: block; } :root:not([data-theme="dark"]) .theme-btn .moon { display: none; } }
+html:not(.js) .theme-btn { display: none; }
+
+/* hero */
+.hero { position: relative; padding-block: clamp(56px, 10vw, 116px) clamp(40px, 7vw, 76px); border-bottom: 1px solid var(--line); }
+.hero h1 { font-family: var(--display); font-weight: 800; font-stretch: 72%; font-size: clamp(2.7rem, 7.6vw, 5.8rem); line-height: .98; letter-spacing: -.01em; margin: 0; max-width: 14ch; text-wrap: balance; }
+.hero h1 { isolation: isolate; }
+.hero h1 em { position: relative; font-style: normal; color: var(--pz-accent); text-shadow: 0 0 calc(var(--glow-size) * 1.6) var(--glow); }
+.hero h1 em::before { content: ""; position: absolute; inset: -45% -12%; z-index: -1; pointer-events: none; background: radial-gradient(closest-side, var(--glow), transparent); opacity: .7; }
+.hero p.lede { margin: 28px 0 0; max-width: 58ch; font-size: 1.1875rem; }
 .hero p.lede + p { margin: 14px 0 0; max-width: 58ch; color: var(--muted); }
 
-section.block { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px 40px; padding-block: 56px; border-bottom: 1px solid var(--line); }
-.label { font: 500 .75rem/1.4 var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding-top: 8px; }
-.label span { display: block; color: var(--accent); margin-bottom: 4px; }
+/* trail sections */
+section.block { position: relative; display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 24px 40px; padding-block: 56px; border-bottom: 1px solid var(--line); }
+section.block::before { content: ""; position: absolute; left: calc(var(--node) / 2 - var(--trail-w) / 2); top: 0; bottom: 0; width: var(--trail-w);
+  background: linear-gradient(var(--line), var(--line)); transition: background .6s; }
+section.block.lit::before, html:not(.lighting) section.block::before { background: color-mix(in srgb, var(--pz-accent) 55%, transparent); }
+:root[data-intensity="loud"] section.block.lit::before, :root[data-intensity="loud"]:not(.lighting) section.block::before { box-shadow: 0 0 var(--glow-size) var(--glow); }
+.label { position: relative; padding-left: calc(var(--node) + 16px); font: 500 .75rem/1.4 var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding-top: 8px; align-self: start; }
+.label span { display: block; color: var(--pz-ember); margin-bottom: 4px; }
+.label .node { position: absolute; left: 0; top: 9px; width: var(--node); height: var(--node); border-radius: 50%; background: var(--bg); border: 2px solid var(--line); transition: border-color .5s, background-color .5s, box-shadow .5s; }
+section.block.lit .label .node, html:not(.lighting) .label .node { border-color: var(--pz-accent); background: var(--pz-accent); box-shadow: 0 0 var(--glow-size) var(--glow); }
+section.block.lit .label, html:not(.lighting) .label { color: var(--ink); }
 h2 { font-family: var(--display); font-weight: 700; font-stretch: 85%; font-size: clamp(1.6rem, 3.2vw, 2.25rem); line-height: 1.1; margin: 0 0 12px; text-wrap: balance; }
 h3 { font-family: var(--display); font-weight: 700; font-stretch: 90%; font-size: 1.25rem; line-height: 1.2; margin: 0; }
 .intro { max-width: 62ch; color: var(--muted); margin: 0 0 32px; }
 p { margin: 0; }
 
-/* principles */
 .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 40px; margin: 0; padding: 0; list-style: none; }
 .rules li { padding-block: 18px; border-top: 1px solid var(--line); display: grid; gap: 4px; }
 .rules b { font-weight: 600; }
 .rules p { color: var(--muted); max-width: 46ch; }
 
-/* process */
-.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
+/* winding trail through the build steps */
+.trailwrap { position: relative; }
+.trail-svg { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 44px; overflow: visible; pointer-events: none; }
+.trail-svg path { fill: none; stroke: var(--pz-accent); stroke-width: var(--trail-w); stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; opacity: .8; }
+:root[data-intensity="loud"] .trail-svg path { filter: drop-shadow(0 0 6px var(--glow)); opacity: 1; }
+.js .trail-svg.pre path { stroke-dashoffset: 1; }
+.trail-svg.drawn path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.4s cubic-bezier(.3,.6,.2,1); }
+.steps { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
 .steps li { counter-increment: s; display: grid; gap: 6px; align-content: start; }
-.steps li::before { content: "0" counter(s); font: 500 .8125rem/1 var(--mono); color: var(--accent); padding-bottom: 10px; border-bottom: 2px solid var(--accent); margin-bottom: 6px; }
+.steps li::before { content: ""; width: var(--node); height: var(--node); margin: 15px 0 12px calc(50% - var(--node) / 2); border-radius: 50%; background: var(--bg); border: 2px solid var(--pz-accent); box-shadow: 0 0 var(--glow-size) var(--glow); position: relative; z-index: 1; }
+.steps li:nth-child(odd)::before { background: var(--pz-accent); }
+.steps h3::before { content: "0" counter(s) " "; font: 500 .75rem/1 var(--mono); color: var(--pz-ember); letter-spacing: .06em; vertical-align: .2em; }
 .steps p { color: var(--muted); font-size: .9688rem; }
 
 /* work + projects */
-.items { display: grid; gap: 0; }
+.items { display: grid; }
 .item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 24px; padding-block: 22px; border-top: 1px solid var(--line); }
 .item:first-child { border-top: 0; padding-top: 0; }
 .item p { grid-column: 1 / -1; color: var(--muted); max-width: 66ch; }
 .item ul { grid-column: 1 / -1; margin: 6px 0 0; padding-left: 1.1em; color: var(--muted); max-width: 66ch; }
 .item ul li { margin-top: 4px; }
+.item ul b { color: var(--ink); font-weight: 600; }
 .chip { font: 500 .6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; padding: 6px 8px; border: 1px solid currentColor; border-radius: 3px; align-self: start; white-space: nowrap; }
-.chip.ok { color: var(--ok); } .chip.wip { color: var(--warn); } .chip.use { color: var(--accent); }
-
-.featured { background: var(--raised); border: 1px solid var(--line); border-radius: 6px; padding: 28px; margin-bottom: 28px; display: grid; gap: 14px; }
-.featured .kicker { font: 500 .75rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.chip.ok { color: var(--pz-accent); } .chip.wip { color: var(--pz-ember); } .chip.use { color: var(--pz-lilac); }
+.featured { position: relative; background: var(--raised); border: 1px solid var(--line); border-radius: 8px; padding: 28px; margin-bottom: 28px; display: grid; gap: 14px; transition: border-color .3s, box-shadow .3s; }
+.featured:hover { border-color: color-mix(in srgb, var(--pz-accent) 45%, var(--line)); box-shadow: 0 10px 40px -22px var(--glow); }
+.featured .kicker { font: 500 .75rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--pz-ember); }
 .featured h3 { font-size: clamp(1.5rem, 3vw, 2rem); font-stretch: 80%; }
-.featured .wt { font: 500 .75rem/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-left: 8px; vertical-align: middle; }
-.featured p { color: var(--ink); max-width: 64ch; }
+.featured p { max-width: 64ch; }
 .specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; margin: 6px 0 0; }
 .specs div { border-top: 1px solid var(--line); padding-top: 10px; }
 .specs dt { font: 500 .6875rem/1.3 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
 .specs dd { margin: 4px 0 0; font-size: .9688rem; }
-
-.quote { grid-column: 1 / -1; margin: 14px 0 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--accent); max-width: 62ch; }
+.quote { grid-column: 1 / -1; margin: 14px 0 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--pz-accent); max-width: 62ch; }
 .quote p { color: var(--ink); font-style: italic; }
 .quote cite { display: block; margin-top: 6px; font: 500 .75rem/1.3 var(--mono); font-style: normal; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 
-/* background */
 .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; }
 .grid2 h3 { font-size: 1.0625rem; margin-bottom: 6px; }
 .grid2 p { color: var(--muted); font-size: .9688rem; }
 
 .contact p { max-width: 58ch; }
 .contact p + p { margin-top: 12px; }
-.contact .addr { font: 500 1.125rem/1.4 var(--mono); margin-top: 16px; display: inline-block; }
+.reach { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 20px; }
+.addr { font: 500 1.0625rem/1.4 var(--mono); }
+.btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; border-radius: 7px; font: 600 .875rem/1 var(--body); cursor: pointer; text-decoration: none; border: 1px solid var(--line); background: transparent; color: var(--ink); transition: border-color .2s, box-shadow .2s; }
+.btn.primary { background: var(--pz-fill); color: var(--pz-on-fill); border-color: var(--pz-fill); }
+.btn.primary:hover { box-shadow: 0 0 var(--glow-size) var(--glow); }
+.btn:hover { border-color: var(--muted); }
+.btn svg { width: 16px; height: 16px; }
+html:not(.js) .copy-btn { display: none; }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px); opacity: 0; background: var(--raised); color: var(--ink); border: 1px solid var(--pz-accent); padding: 10px 16px; border-radius: 8px; font: 500 .875rem/1 var(--body); pointer-events: none; transition: opacity .25s, transform .25s; z-index: 20; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+footer .gem { color: var(--pz-ember); }
 
-@media (max-width: 760px) {
-  section.block { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 44px; }
-  .label { padding-top: 0; }
-  .featured { padding: 20px; }
+@media (max-width: 960px) {
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 18px; padding-left: calc(var(--node) + 16px); }
+  .steps::before { content: ""; position: absolute; left: calc(var(--node) / 2 - var(--trail-w) / 2); top: 10px; bottom: 10px; width: var(--trail-w); background: color-mix(in srgb, var(--pz-accent) 55%, transparent); }
+  .steps li { position: relative; }
+  .steps li::before { position: absolute; left: calc(-1 * (var(--node) + 16px)); top: 4px; margin: 0; }
+  .trail-svg { display: none; }
 }
-@media (max-width: 960px) { .steps { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); } }
+@media (max-width: 760px) {
+  section.block { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 44px; padding-left: calc(var(--node) + 16px); }
+  .label { padding-top: 0; margin-left: calc(-1 * (var(--node) + 16px)); }
+  .featured { padding: 20px; }
+  header.top nav { order: 3; width: 100%; overflow-x: auto; flex-wrap: nowrap; }
+}
 @media (max-width: 560px) { .specs, .grid2 { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: no-preference) {
-  .hero h1, .hero p { animation: rise .6s ease-out both; }
-  .hero p.lede { animation-delay: .08s; } .hero p.lede + p { animation-delay: .14s; }
-  @keyframes rise { from { transform: translateY(8px); } to { transform: none; } }
+  .hero h1, .hero p { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+  .hero p.lede { animation-delay: .1s; } .hero p.lede + p { animation-delay: .18s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="top">
 
 <header class="top">
-  <span class="mark">Joseph Landry</span>
+  <a class="mark" href="#top"><i aria-hidden="true"></i>Joseph Landry</a>
   <nav aria-label="Sections">
-    <a href="#thinking">How I think</a>
-    <a href="#work">What I build</a>
+    <a href="#thinking">Thinking</a>
+    <a href="#process">Building</a>
+    <a href="#work">Work</a>
     <a href="#projects">Projects</a>
+    <a href="#background">Background</a>
     <a href="#contact">Contact</a>
   </nav>
+  <div class="tools">
+    <a class="icon-btn" href="https://github.com/AltusRex" target="_blank" rel="noopener" aria-label="GitHub profile"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.88.87 2.34.67.07-.52.28-.87.51-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.6 7.6 0 0 1 8 3.87c.68 0 1.36.09 2 .26 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+    <button class="icon-btn theme-btn" type="button" id="theme-toggle" aria-label="Switch light or dark theme"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+  </div>
 </header>
 
 <section class="hero">
@@ -152,7 +219,7 @@ footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: va
 </section>
 
 <section class="block" id="thinking">
-  <div class="label"><span>01</span>How I think</div>
+  <div class="label"><i class="node" aria-hidden="true"></i><span>01</span>How I think</div>
   <div>
     <h2>The rules I build by</h2>
     <p class="intro">These come from fixing the same problems more than once. They show up in everything I make, from a document generator to a home firewall.</p>
@@ -170,10 +237,12 @@ footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: va
 </section>
 
 <section class="block" id="process">
-  <div class="label"><span>02</span>How I build</div>
+  <div class="label"><i class="node" aria-hidden="true"></i><span>02</span>How I build</div>
   <div>
     <h2>Spec first, then let the machine type</h2>
     <p class="intro">I'm strongest at logic and at seeing a problem from an odd angle. AI fills the hands-on coding gap. The loop looks like this.</p>
+    <div class="trailwrap">
+    <svg class="trail-svg" viewBox="0 0 1000 44" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M100 22 C 160 -6, 240 50, 300 22 S 440 -6, 500 22 S 640 50, 700 22 S 840 -6, 900 22"/></svg>
     <ol class="steps">
       <li><h3>Find the friction</h3><p>Something takes too long, breaks the same way twice, or nobody has bothered to fix.</p></li>
       <li><h3>Write the spec</h3><p>What it does, what it must never do, and how I'll know it worked.</p></li>
@@ -181,11 +250,12 @@ footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: va
       <li><h3>Prove it on real data</h3><p>A quick go or no-go test before I sink more time in.</p></li>
       <li><h3>Ship small, keep patching</h3><p>Other people use it, report what breaks, and I version it forward.</p></li>
     </ol>
+    </div>
   </div>
 </section>
 
 <section class="block" id="work">
-  <div class="label"><span>03</span>What I build</div>
+  <div class="label"><i class="node" aria-hidden="true"></i><span>03</span>What I build</div>
   <div>
     <h2>AI tooling for real work</h2>
     <p class="intro">At my day job I build tools for other technicians and the people they support. The specifics belong to my employer, so this is the shape of the work rather than the details.</p>
@@ -221,7 +291,7 @@ footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: va
 </section>
 
 <section class="block" id="projects">
-  <div class="label"><span>04</span>Projects</div>
+  <div class="label"><i class="node" aria-hidden="true"></i><span>04</span>Projects</div>
   <div>
     <h2>Things I build on my own time</h2>
     <p class="intro">These are mine, start to finish. They're the ones where I ask "can this be done?" and then go find out.</p>
@@ -279,7 +349,7 @@ footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: va
 </section>
 
 <section class="block" id="background">
-  <div class="label"><span>05</span>Background</div>
+  <div class="label"><i class="node" aria-hidden="true"></i><span>05</span>Background</div>
   <div>
     <h2>Where the experience comes from</h2>
     <p class="intro">I run client engagements from scoping through discovery, documentation and deployment.</p>
@@ -293,20 +363,70 @@ footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: va
 </section>
 
 <section class="block contact" id="contact">
-  <div class="label"><span>06</span>Contact</div>
+  <div class="label"><i class="node" aria-hidden="true"></i><span>06</span>Contact</div>
   <div>
     <h2>Say hello</h2>
     <p>If you're working on something that needs a systems person who can also get AI to do the heavy lifting, I'd like to hear about it.</p>
     <p>I'm just as happy to talk about the things I build for the fun of it - lately, that's mostly a world that runs on its own.</p>
-    <a class="addr" href="mailto:jlandryii@omegacs.us">jlandryii@omegacs.us</a>
+    <div class="reach">
+      <a class="addr" href="mailto:jlandryii@omegacs.us" id="email">jlandryii@omegacs.us</a>
+      <button class="btn primary copy-btn" type="button" id="copy-email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy email</button>
+      <a class="btn" href="https://github.com/AltusRex" target="_blank" rel="noopener">GitHub profile</a>
+    </div>
   </div>
 </section>
 
 <footer>
-  <span>Joseph Landry · omegacs.us</span>
+  <span>Joseph Landry <span class="gem" aria-hidden="true">&#9670;</span> omegacs.us</span>
   <span>Maintained with Claude. Updated November 2026.</span>
 </footer>
 
 </div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var root=document.documentElement, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* theme toggle */
+  var tb=document.getElementById('theme-toggle');
+  function current(){var t=root.getAttribute('data-theme');if(t)return t;return matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}
+  if(tb)tb.addEventListener('click',function(){var n=current()==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('theme',n);}catch(e){}toast(n==='dark'?'Dark theme':'Light theme');});
+  /* toast */
+  var tt,t=document.getElementById('toast');
+  function toast(m){if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show');},1600);}
+  /* copy email */
+  var cb=document.getElementById('copy-email'),em=document.getElementById('email');
+  if(cb&&em)cb.addEventListener('click',function(){var v=em.textContent.trim();
+    function fallback(){var r=document.createRange();r.selectNodeContents(em);var s=getSelection();s.removeAllRanges();s.addRange(r);toast('Selected - press Ctrl+C to copy');}
+    try{navigator.clipboard.writeText(v).then(function(){toast('Email copied');},fallback);}catch(e){fallback();}});
+  /* sticky index + scroll lighting, driven by one scroll handler so short sections still register */
+  var links={};document.querySelectorAll('header.top nav a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a;});
+  var secs=[].slice.call(document.querySelectorAll('section.block[id]'));
+  var bar=document.querySelector('header.top'), lighting=!reduce;
+  if(lighting)root.classList.add('lighting');
+  var lock=null;
+  function setActive(id){Object.keys(links).forEach(function(k){if(k===id)links[k].setAttribute('aria-current','true');else links[k].removeAttribute('aria-current');});}
+  function update(){
+    var vh=innerHeight, line=(bar?bar.offsetHeight:0)+vh*0.3, active=null;
+    secs.forEach(function(sec){var top=sec.getBoundingClientRect().top;
+      if(top<=line)active=sec.id;
+      if(lighting&&top<=vh*0.55)sec.classList.add('lit');});
+    /* at the bottom of the page, the last sections can never reach the line: hand off to the last one */
+    if(scrollY+vh>=document.documentElement.scrollHeight-4)active=secs[secs.length-1].id;
+    if(lock)active=lock;
+    setActive(active);
+  }
+  var ticking=false;
+  addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(function(){ticking=false;update();});}},{passive:true});
+  addEventListener('resize',update);
+  /* a click on the index highlights that section right away, even if it is too short to reach the line */
+  Object.keys(links).forEach(function(k){links[k].addEventListener('click',function(){lock=k;setActive(k);clearTimeout(links[k]._t);links[k]._t=setTimeout(function(){lock=null;},900);});});
+  addEventListener('wheel',function(){lock=null;},{passive:true});addEventListener('touchstart',function(){lock=null;},{passive:true});
+  update();
+  /* trail draw-in */
+  var svg=document.querySelector('.trail-svg');
+  if(svg&&!reduce&&('IntersectionObserver' in window)){svg.classList.add('pre');var so=new IntersectionObserver(function(es){if(es[0].isIntersecting){svg.getBoundingClientRect();svg.classList.add('drawn');svg.classList.remove('pre');so.disconnect();}},{threshold:.6});so.observe(svg);}
+})();
+</script>
 </body>
 </html>
