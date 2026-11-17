@@ -1,0 +1,30 @@
+# omegacs.us
+
+> Joseph Landry is a systems administrator who uses AI to build tools, agent fleets and home-lab projects. He writes the spec, AI writes most of the code, and he tests it on real data. This file summarizes the public site for AI readers.
+
+## How he works
+- Simple beats clever. Low variance. Search before you build.
+- Nudge, don't block. Same input, same output. Read-only by default.
+- Extra accuracy where mistakes are expensive. Built so another person or AI can maintain it.
+- Process: find the friction, write the spec, AI builds and he reviews, prove it on real data with a go/no-go test, ship small and keep patching.
+
+## What he builds at work (described generically)
+- AI skills that turn a process into a repeatable document tool (scopes, plans, BOMs, status reports).
+- Read-only-by-default MCP connectors for ticketing and documentation systems, auto-updating via CI releases.
+- A fleet of single-purpose agent bots with an orchestrator, a desired-state baseline, and an approval list.
+- A firewall config migration mapper, verified three ways, used in production by other techs.
+
+## Personal projects
+- An unnamed game: his own Godot 4 / C# life sim + action RPG. 20 system specs, ~1,000 C# files, ~120k lines, 200+ test files. NPCs physically do the work; the player is an NPC with a different input. Validated with 100+ day headless runs.
+- vexp: found and reported four bugs in the vexp AI context engine over two days and four releases (v2.0.27-2.0.30), each with repro packages and debug traces: zero C# search results (developer adopted his suggested BM25-promotion fallback; fixed next release; developer called it "one of the most useful bug reports we've received"), inconsistent fix across classes (side-by-side trace comparison), LSP call edges collected but never queried due to FQN format mismatch, and blast-radius view showing outbound not inbound calls. Method: verify the data layer directly, isolate the failing layer, compare passing vs failing cases, retest every release.
+- Rewire: OpenWrt package suite for retired Meraki MX64 firewalls; OPNsense plugin port in progress.
+- Home network on a Sophos XGS 116 running OPNsense.
+- Game preservation: offline rebuilds of games.
+- MX64 to OpenWrt flash guide.
+
+## Background
+Entra ID, Intune, Windows 365, Active Directory, Meraki, firewall migrations, SharePoint and NAS migrations, plain-language technical writing.
+
+## Site
+- Home: https://omegacs.us/
+- Contact: jlandryii@omegacs.us
