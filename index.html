@@ -9,7 +9,7 @@
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#14101d" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f8f5fb" media="(prefers-color-scheme: light)">
-<meta name="pizzazz-recipe" content='{"pz":1,"kit":"my-color-profile","concept":"Wisp Trail","family":"wildcard","dev":{"intensity":"standard","motion":"scroll lighting","interactivity":"sticky index, theme toggle, copy email"},"sig":"glowing waypoint trail","pal":{"pri":"#EFE9F7","sec":"#FFAA4D","tint":"#1C1727","zeb":"#1C1727","mut":"#A79CBB","ftr":"#A79CBB","hair":"#2A2236","acc":"#C6F02A","watch":"#FFAA4D"},"font":{"h":"Archivo","b":"IBM Plex Sans"},"date":"2026-11-17"}'>
+<meta name="pizzazz-recipe" content='{"pz":1,"kit":"my-color-profile","concept":"Wisp Trail","family":"wildcard","dev":{"intensity":"standard","motion":"scroll lighting","interactivity":"sticky index, theme toggle, copy email, activity matrix, rule links, section stage"},"sig":"glowing waypoint trail","pal":{"pri":"#EFE9F7","sec":"#FFAA4D","tint":"#1C1727","zeb":"#1C1727","mut":"#A79CBB","ftr":"#A79CBB","hair":"#2A2236","acc":"#C6F02A","watch":"#FFAA4D"},"font":{"h":"Archivo","b":"IBM Plex Sans"},"date":"2026-11-17"}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -110,7 +110,7 @@ h3 { font-family: var(--display); font-weight: 700; font-stretch: 90%; font-size
 p { margin: 0; }
 
 .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 40px; margin: 0; padding: 0; list-style: none; }
-.rules li { padding-block: 18px; border-top: 1px solid var(--line); display: grid; gap: 4px; }
+.rules li { padding-block: 18px; border-top: 1px solid var(--line); display: grid; gap: 4px; align-content: start; }
 .rules b { font-weight: 600; }
 .rules p { color: var(--muted); max-width: 46ch; }
 
@@ -171,6 +171,60 @@ html:not(.js) .copy-btn { display: none; }
 footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 footer .gem { color: var(--pz-ember); }
 
+/* activity matrix: GitHub's shape and legend, Mire Lantern greens */
+:root { --l0: color-mix(in srgb, var(--ink) 8%, var(--raised)); --l1: color-mix(in srgb, var(--pz-accent) 26%, var(--raised)); --l2: color-mix(in srgb, var(--pz-accent) 50%, var(--raised)); --l3: color-mix(in srgb, var(--pz-accent) 75%, var(--raised)); --l4: var(--pz-accent); --cell: 11px; --cgap: 3px; }
+.activity { margin: 0; background: var(--raised); border: 1px solid var(--line); border-radius: 8px; padding: 18px 18px 14px; }
+.matrix-scroll { overflow-x: auto; scrollbar-width: thin; padding-bottom: 4px; }
+.matrix { position: relative; display: grid; grid-template-columns: 30px auto; grid-template-rows: 18px auto; width: max-content; font: 400 .6875rem/1 var(--mono); color: var(--muted); }
+.matrix .months { grid-column: 2; position: relative; height: 18px; }
+.matrix .months span { position: absolute; top: 0; white-space: nowrap; }
+.matrix .wdays { grid-row: 2; display: grid; grid-template-rows: repeat(7, var(--cell)); gap: var(--cgap); }
+.matrix .wdays span { line-height: var(--cell); }
+.matrix .cells { grid-row: 2; grid-column: 2; display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, var(--cell)); grid-auto-columns: var(--cell); gap: var(--cgap); }
+.matrix i, .legend i { display: block; width: var(--cell); height: var(--cell); border-radius: 2px; background: var(--l0); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent); }
+.matrix i[data-l="1"], .legend i[data-l="1"] { background: var(--l1); } .matrix i[data-l="2"], .legend i[data-l="2"] { background: var(--l2); }
+.matrix i[data-l="3"], .legend i[data-l="3"] { background: var(--l3); } .matrix i[data-l="4"], .legend i[data-l="4"] { background: var(--l4); }
+.matrix i[data-l="4"] { box-shadow: 0 0 6px var(--glow); }
+.matrix i.pad { visibility: hidden; }
+.matrix i:hover { outline: 1px solid var(--ink); outline-offset: 1px; }
+.matrix-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px 16px; flex-wrap: wrap; margin-top: 10px; font: 400 .75rem/1.4 var(--mono); color: var(--muted); }
+.legend { display: inline-flex; align-items: center; gap: 3px; }
+.legend i { display: inline-block; }
+.tip { position: fixed; z-index: 30; pointer-events: none; opacity: 0; transform: translate(-50%, calc(-100% - 8px)); background: var(--ink); color: var(--bg); font: 500 .75rem/1 var(--mono); padding: 7px 9px; border-radius: 5px; white-space: nowrap; transition: opacity .12s; }
+.tip.show { opacity: 1; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 24px; margin: 24px 0 0; }
+.stats div { border-top: 1px solid var(--line); padding: 14px 0 16px; }
+.stats dt { font: 500 .6875rem/1.3 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.stats dd { margin: 6px 0 0; font: 700 clamp(1.6rem, 3vw, 2.1rem)/1 var(--display); font-stretch: 80%; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stats dd small { font: 400 .8125rem/1 var(--body); color: var(--muted); margin-left: 6px; }
+.stats-note { font: 400 .75rem/1.4 var(--mono); color: var(--muted); }
+
+/* principles linked to the work that shows them */
+.rules li.has-links { position: relative; }
+.rule-btn { justify-self: start; margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; border: 0; background: none; color: var(--pz-accent); font: 500 .75rem/1.2 var(--mono); letter-spacing: .04em; cursor: pointer; }
+.rule-btn::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid currentColor; transition: background-color .2s; }
+.rule-btn[aria-expanded="true"]::before { background: currentColor; box-shadow: 0 0 8px var(--glow); }
+.rule-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.rule-links[hidden] { display: none; }
+.rule-links a { font: 500 .75rem/1 var(--mono); padding: 6px 8px; border-radius: 4px; text-decoration: none; color: var(--ink); background: color-mix(in srgb, var(--pz-accent) 12%, transparent); border: 1px solid color-mix(in srgb, var(--pz-accent) 35%, transparent); }
+.rule-links a:hover { border-color: var(--pz-accent); }
+.built-by { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 4px 10px; font: 500 .6875rem/1.4 var(--mono); letter-spacing: .04em; color: var(--muted); }
+.built-by a { color: var(--muted); text-decoration: none; border-bottom: 1px dotted currentColor; }
+.built-by a:hover, .built-by a.on { color: var(--pz-accent); }
+.item, .featured { scroll-margin-top: 90px; transition: box-shadow .4s, background-color .4s; }
+.item.match { box-shadow: -14px 0 0 -12px var(--pz-accent); }
+.item.flash, .featured.flash, .rules li.flash { background: color-mix(in srgb, var(--pz-accent) 7%, transparent); }
+
+/* section stage: one small canvas in the left gutter whose scene follows the section */
+.stage { display: none; }
+@media (min-width: 761px) and (min-height: 600px) {
+  .js .stage { display: block; position: fixed; bottom: 28px; width: 161px; z-index: 2; opacity: 0; transform: translateY(8px); transition: opacity .5s, transform .5s; pointer-events: none; }
+  .stage.show { opacity: 1; transform: none; }
+  .stage.duck { opacity: .12; }
+  .stage canvas { display: block; width: 161px; height: 196px; border-radius: 10px; border: 1px solid var(--line); background: var(--raised); }
+  .stage-cap { display: block; margin-top: 8px; font: 500 .6875rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); transition: opacity .35s; }
+}
+
 @media (max-width: 960px) {
   .steps { grid-template-columns: minmax(0, 1fr); gap: 18px; padding-left: calc(var(--node) + 16px); }
   .steps::before { content: ""; position: absolute; left: calc(var(--node) / 2 - var(--trail-w) / 2); top: 10px; bottom: 10px; width: var(--trail-w); background: color-mix(in srgb, var(--pz-accent) 55%, transparent); }
@@ -184,7 +238,7 @@ footer .gem { color: var(--pz-ember); }
   .featured { padding: 20px; }
   header.top nav { order: 3; width: 100%; overflow-x: auto; flex-wrap: nowrap; }
 }
-@media (max-width: 560px) { .specs, .grid2 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 560px) { .specs, .grid2 { grid-template-columns: minmax(0, 1fr); } .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (prefers-reduced-motion: no-preference) {
   .hero h1, .hero p { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
   .hero p.lede { animation-delay: .1s; } .hero p.lede + p { animation-delay: .18s; }
@@ -203,6 +257,7 @@ footer .gem { color: var(--pz-ember); }
     <a href="#process">Building</a>
     <a href="#work">Work</a>
     <a href="#projects">Projects</a>
+    <a href="#activity">Activity</a>
     <a href="#background">Background</a>
     <a href="#contact">Contact</a>
   </nav>
@@ -224,14 +279,14 @@ footer .gem { color: var(--pz-ember); }
     <h2>The rules I build by</h2>
     <p class="intro">These come from fixing the same problems more than once. They show up in everything I make, from a document generator to a home firewall.</p>
     <ul class="rules">
-      <li><b>Simple beats clever.</b><p>I'll take a little less automation over a lot more architecture.</p></li>
-      <li><b>Low variance.</b><p>A process should work in almost any environment without per-case tweaking.</p></li>
-      <li><b>Search before you build.</b><p>Reuse what exists. Write something new only when nothing fits.</p></li>
-      <li><b>Nudge, don't block.</b><p>When the data is messy, the tool asks you to fix it instead of refusing to run.</p></li>
-      <li><b>Same input, same output.</b><p>A generated document shouldn't depend on who ran the tool or which AI built it.</p></li>
-      <li><b>Read-only by default.</b><p>Tools look before they touch. Nothing changes until a person says yes.</p></li>
-      <li><b>Accuracy where mistakes are expensive.</b><p>A bad config mapping costs hours of troubleshooting later, so that's where I spend the extra checks.</p></li>
-      <li><b>Built for the next maintainer.</b><p>Documented and structured so another person, or another AI, can pick it up cold.</p></li>
+      <li data-rule="simple"><b>Simple beats clever.</b><p>I'll take a little less automation over a lot more architecture.</p></li>
+      <li data-rule="variance"><b>Low variance.</b><p>A process should work in almost any environment without per-case tweaking.</p></li>
+      <li data-rule="search"><b>Search before you build.</b><p>Reuse what exists. Write something new only when nothing fits.</p></li>
+      <li data-rule="nudge"><b>Nudge, don't block.</b><p>When the data is messy, the tool asks you to fix it instead of refusing to run.</p></li>
+      <li data-rule="same"><b>Same input, same output.</b><p>A generated document shouldn't depend on who ran the tool or which AI built it.</p></li>
+      <li data-rule="readonly"><b>Read-only by default.</b><p>Tools look before they touch. Nothing changes until a person says yes.</p></li>
+      <li data-rule="accuracy"><b>Accuracy where mistakes are expensive.</b><p>A bad config mapping costs hours of troubleshooting later, so that's where I spend the extra checks.</p></li>
+      <li data-rule="maintainer"><b>Built for the next maintainer.</b><p>Documented and structured so another person, or another AI, can pick it up cold.</p></li>
     </ul>
   </div>
 </section>
@@ -260,11 +315,11 @@ footer .gem { color: var(--pz-ember); }
     <h2>AI tooling for real work</h2>
     <p class="intro">At my day job I build tools for other technicians and the people they support. The specifics belong to my employer, so this is the shape of the work rather than the details.</p>
     <div class="items">
-      <div class="item">
+      <div class="item" id="w-skills">
         <h3>Skills that turn a process into a tool</h3><span class="chip use">In daily use</span>
         <p>Packaged AI skills that draft scopes of work, engineering plans, bills of materials and client status reports. Each one produces the same structure no matter who runs it, and the status reports can run on a schedule as drafts for review.</p>
       </div>
-      <div class="item">
+      <div class="item" id="w-connectors">
         <h3>Connectors that let AI read business systems</h3><span class="chip use">In daily use</span>
         <p>MCP connectors that give AI read access to the ticketing and documentation systems a tech lives in.</p>
         <ul>
@@ -273,7 +328,7 @@ footer .gem { color: var(--pz-ember); }
           <li>Sensitive fields are excluded on purpose. The connector reports that a secret exists, never what it is.</li>
         </ul>
       </div>
-      <div class="item">
+      <div class="item" id="w-agents">
         <h3>A fleet of single-purpose agents</h3><span class="chip use">Running</span>
         <p>A set of AI bots where each one has one job - tracking my time, catching messages that slip through, scouting a project before it starts, watching our own tools for known vulnerabilities. An orchestrator bot helps me build and maintain the rest.</p>
         <ul>
@@ -282,7 +337,7 @@ footer .gem { color: var(--pz-ember); }
           <li>Teammates don't need to know which bot does what. One front-door bot routes the request.</li>
         </ul>
       </div>
-      <div class="item">
+      <div class="item" id="w-mapper">
         <h3>A config migration mapper</h3><span class="chip use">In production</span>
         <p>Takes one firewall vendor's config export and produces a mapping workbook and a click-path build guide for another. The output is checked three ways - against the target's API schema, against an independent re-read of the export, and with a traffic simulation. Other techs use it on live migrations and I patch it from their reports.</p>
       </div>
@@ -296,7 +351,7 @@ footer .gem { color: var(--pz-ember); }
     <h2>Things I build on my own time</h2>
     <p class="intro">These are mine, start to finish. They're the ones where I ask "can this be done?" and then go find out.</p>
 
-    <article class="featured">
+    <article class="featured" id="p-game">
       <span class="kicker">Godot 4 · C# · Simulation</span>
       <h3>A world that doesn't wait for you</h3>
       <p>My own game, built from the ground up in Godot and C#. It's a life sim and an action RPG at the same time, set in a world that keeps moving whether you show up or not. The rule I wrote down on day one was "choices matter, even when you choose to do nothing."</p>
@@ -308,7 +363,7 @@ footer .gem { color: var(--pz-ember); }
       </dl>
     </article>
 
-    <article class="featured">
+    <article class="featured" id="p-rewire">
       <span class="kicker">Home lab · OpenWrt · OPNsense</span>
       <h3>Rewire</h3>
       <p>Retired Meraki MX64 firewalls are solid hardware that turns into e-waste once the license and support end. Rewire is an OpenWrt package suite that makes them useful again as home-lab gateways, installed on a fresh flash.</p>
@@ -321,7 +376,7 @@ footer .gem { color: var(--pz-ember); }
     </article>
 
     <div class="items">
-      <div class="item">
+      <div class="item" id="p-vexp">
         <h3>Debugging the tool that helps AI read my code</h3><span class="chip use">Fixed upstream</span>
         <p>My game's AI workflow runs on vexp, a context engine that gives coding agents a pre-indexed, ranked view of a codebase so they don't have to grep around and burn tokens. On a 120,000-line C# project it wasn't returning the right context, so I took it apart and worked with its developer directly. Over two days and four releases I sent four reports, each with a repro package and debug traces.</p>
         <ul>
@@ -332,15 +387,15 @@ footer .gem { color: var(--pz-ember); }
         </ul>
         <blockquote class="quote"><p>"This is one of the most useful bug reports we've received... seriously, thank you for the depth here; it made our job easy."</p><cite>Nicola Alessi, vexp developer</cite></blockquote>
       </div>
-      <div class="item">
+      <div class="item" id="p-firewall">
         <h3>A firewall that was holding back</h3><span class="chip ok">Running</span>
         <p>I rebuilt my home network on a Sophos XGS 116 running OPNsense instead of its stock firmware. Along the way I found its SFP port is 10G-capable hardware that the vendor software limits to 1G. Repurposed consumer routers and spare enterprise switches fill out the rest.</p>
       </div>
-      <div class="item">
+      <div class="item" id="p-preserve">
         <h3>Game preservation</h3><span class="chip wip">In progress</span>
         <p>Rebuilding games so they keep running on modern systems and work offline. One of them is a game my wife loves but rarely has time for. An offline build means she can pick it up and put it down with no pressure to keep up, and we can still play together over the home network.</p>
       </div>
-      <div class="item">
+      <div class="item" id="p-guide">
         <h3>MX64 to OpenWrt flash guide</h3><span class="chip ok">Written</span>
         <p>A lean how-to so someone else can repeat the conversion without me in the room. Only the steps that matter.</p>
       </div>
@@ -348,8 +403,29 @@ footer .gem { color: var(--pz-ember); }
   </div>
 </section>
 
+<section class="block" id="activity">
+  <div class="label"><i class="node" aria-hidden="true"></i><span>05</span>Activity</div>
+  <div>
+    <h2>What the last year looked like</h2>
+    <p class="intro">Every square is a day, and the brighter it is, the more I committed. Most of it is the game, which lives in a private repository, so the work shows up here even though the code doesn't.</p>
+    <figure class="activity" id="activity-chart" hidden>
+      <div class="matrix-scroll"><div class="matrix" id="matrix"></div></div>
+      <figcaption class="matrix-foot"><span id="matrix-note"></span><span class="legend" aria-hidden="true">Less <i data-l="0"></i><i data-l="1"></i><i data-l="2"></i><i data-l="3"></i><i data-l="4"></i> More</span></figcaption>
+    </figure>
+    <dl class="stats">
+      <div><dt>Commits in the last year</dt><dd data-stat="total">-</dd></div>
+      <div><dt>Busiest day</dt><dd data-stat="peak">-</dd></div>
+      <div><dt>Lines of C# in the game</dt><dd data-count="121060">121,060</dd></div>
+      <div><dt>C# files</dt><dd data-count="1023">1,023</dd></div>
+      <div><dt>System specs</dt><dd data-count="20">20</dd></div>
+      <div><dt>Test files</dt><dd data-count="200" data-suffix="+">200+</dd></div>
+    </dl>
+    <p class="stats-note">Game numbers as of November 2026.</p>
+  </div>
+</section>
+
 <section class="block" id="background">
-  <div class="label"><i class="node" aria-hidden="true"></i><span>05</span>Background</div>
+  <div class="label"><i class="node" aria-hidden="true"></i><span>06</span>Background</div>
   <div>
     <h2>Where the experience comes from</h2>
     <p class="intro">I run client engagements from scoping through discovery, documentation and deployment.</p>
@@ -363,7 +439,7 @@ footer .gem { color: var(--pz-ember); }
 </section>
 
 <section class="block contact" id="contact">
-  <div class="label"><i class="node" aria-hidden="true"></i><span>06</span>Contact</div>
+  <div class="label"><i class="node" aria-hidden="true"></i><span>07</span>Contact</div>
   <div>
     <h2>Say hello</h2>
     <p>If you're working on something that needs a systems person who can also get AI to do the heavy lifting, I'd like to hear about it.</p>
@@ -383,6 +459,8 @@ footer .gem { color: var(--pz-ember); }
 
 </div>
 
+<div class="stage" id="stage" aria-hidden="true"><canvas></canvas><span class="stage-cap"></span></div>
+<div class="tip" id="tip" role="tooltip"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
@@ -426,6 +504,229 @@ footer .gem { color: var(--pz-ember); }
   /* trail draw-in */
   var svg=document.querySelector('.trail-svg');
   if(svg&&!reduce&&('IntersectionObserver' in window)){svg.classList.add('pre');var so=new IntersectionObserver(function(es){if(es[0].isIntersecting){svg.getBoundingClientRect();svg.classList.add('drawn');svg.classList.remove('pre');so.disconnect();}},{threshold:.6});so.observe(svg);}
+})();
+</script>
+<script>
+(function(){
+  var root=document.documentElement, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function day(d){return MON[d.getUTCMonth()]+' '+d.getUTCDate();}
+  function n(x){return x.toLocaleString('en-US');}
+
+  /* ---------- activity matrix ---------- */
+  var tip=document.getElementById('tip');
+  function showTip(el,text){var r=el.getBoundingClientRect();tip.textContent=text;tip.style.left=(r.left+r.width/2)+'px';tip.style.top=r.top+'px';tip.classList.add('show');}
+  function hideTip(){tip.classList.remove('show');}
+  function build(data){
+    var days=data.days, start=new Date(data.from+'T00:00:00Z'), unit=data.source==='github'?'contribution':'commit';
+    var nz=days.filter(function(c){return c>0;}).sort(function(a,b){return a-b;});
+    var q=[.25,.5,.75].map(function(p){return nz.length?nz[Math.floor(p*(nz.length-1))]:0;});
+    function level(c){if(!c)return 0;var l=1;q.forEach(function(v){if(c>v)l++;});return Math.min(4,l);}
+    var m=document.getElementById('matrix'), step=11+3;
+    var months=document.createElement('div');months.className='months';
+    var wd=document.createElement('div');wd.className='wdays';['','Mon','','Wed','','Fri',''].forEach(function(s){var e=document.createElement('span');e.textContent=s;wd.appendChild(e);});
+    var cells=document.createElement('div');cells.className='cells';
+    var total=0,peak=0,peakI=0,active=0,lastLabel=-9,lastMonth=-1;
+    days.forEach(function(c,i){
+      var d=new Date(start.getTime()+i*864e5), w=Math.floor(i/7);
+      if(d.getUTCDay()===0&&d.getUTCMonth()!==lastMonth){if(w-lastLabel>=3&&d.getUTCDate()<=7){var s=document.createElement('span');s.textContent=MON[d.getUTCMonth()];s.style.left=(w*step)+'px';months.appendChild(s);lastLabel=w;}lastMonth=d.getUTCMonth();}
+      var e=document.createElement('i');e.setAttribute('data-l',level(c));e.setAttribute('data-i',i);cells.appendChild(e);
+      total+=c;if(c)active++;if(c>peak){peak=c;peakI=i;}
+    });
+    m.appendChild(document.createElement('span'));m.appendChild(months);m.appendChild(wd);m.appendChild(cells);
+    function label(i){var c=days[i],d=new Date(start.getTime()+i*864e5);return (c?n(c)+' '+unit+(c===1?'':'s'):'No '+unit+'s')+' on '+day(d);}
+    cells.addEventListener('mouseover',function(ev){var t=ev.target;if(t.hasAttribute('data-i'))showTip(t,label(+t.getAttribute('data-i')));});
+    cells.addEventListener('mouseleave',hideTip);
+    cells.addEventListener('click',function(ev){var t=ev.target;if(t.hasAttribute('data-i')){showTip(t,label(+t.getAttribute('data-i')));clearTimeout(cells._t);cells._t=setTimeout(hideTip,1800);}});
+    addEventListener('scroll',hideTip,{passive:true});
+    var peakDay=day(new Date(start.getTime()+peakI*864e5)), end=new Date(data.to+'T00:00:00Z');
+    m.setAttribute('role','img');
+    m.setAttribute('aria-label',n(total)+' '+unit+'s over the last year, on '+active+' different days. The busiest day was '+peakDay+', with '+n(peak)+'.');
+    document.getElementById('matrix-note').textContent=data.source==='github'?'From GitHub, updated '+day(new Date((data.updated||data.to)+'T00:00:00Z'))+'.':'From the commit history of my repositories, through '+day(end)+'.';
+    var dt=document.querySelector('[data-stat="total"]');dt.textContent=n(total);dt.setAttribute('data-count',total);
+    document.querySelector('[data-stat="total"]').previousElementSibling.textContent=unit==='commit'?'Commits in the last year':'Contributions in the last year';
+    var dp=document.querySelector('[data-stat="peak"]');dp.innerHTML=n(peak)+'<small></small>';dp.querySelector('small').textContent=peakDay;
+    document.getElementById('activity-chart').hidden=false;
+    var sc=m.parentNode;sc.scrollLeft=sc.scrollWidth;
+  }
+  fetch('data/activity.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():Promise.reject(r.status);}).then(build).catch(function(){
+    document.querySelectorAll('[data-stat]').forEach(function(dd){dd.parentNode.hidden=true;});
+  });
+
+  /* count-up for the stat tiles, once, when they come into view */
+  var stats=document.querySelector('.stats');
+  if(stats&&!reduce&&'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;io.disconnect();
+      stats.querySelectorAll('dd[data-count]').forEach(function(dd){var to=+dd.getAttribute('data-count'),suf=dd.getAttribute('data-suffix')||'',t0=performance.now();
+        (function tick(now){var k=Math.min(1,(now-t0)/1100);k=1-Math.pow(1-k,3);dd.textContent=n(Math.round(to*k))+suf;if(k<1)requestAnimationFrame(tick);})(t0);});
+    },{threshold:.4});io.observe(stats);
+  }
+
+  /* ---------- principles linked to the work that shows them ---------- */
+  var RULES={simple:['p-rewire','p-guide','p-firewall'],variance:['w-skills','w-mapper','w-agents'],search:['p-vexp','p-firewall','p-rewire','p-preserve'],nudge:['w-skills'],same:['w-skills','w-mapper'],readonly:['w-connectors','w-agents'],accuracy:['w-mapper','p-game','p-vexp'],maintainer:['p-guide','w-agents','w-connectors','p-vexp']};
+  var SHORT={'w-skills':'Process skills','w-connectors':'Read-only connectors','w-agents':'Agent fleet','w-mapper':'Config mapper','p-game':'The game','p-rewire':'Rewire','p-vexp':'vexp bug hunt','p-firewall':'Home firewall','p-preserve':'Game preservation','p-guide':'Flash guide'};
+  var ruleName={},open=null;
+  function flash(el){el.classList.add('flash');setTimeout(function(){el.classList.remove('flash');},1500);}
+  function setRule(key){
+    open=open===key?null:key;
+    document.querySelectorAll('.rules li[data-rule]').forEach(function(li){var on=li.getAttribute('data-rule')===open;li.querySelector('.rule-btn').setAttribute('aria-expanded',on);li.querySelector('.rule-links').hidden=!on;});
+    Object.keys(SHORT).forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle('match',!!open&&RULES[open].indexOf(id)>-1);});
+    document.querySelectorAll('.built-by a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-rule')===open);});
+  }
+  document.querySelectorAll('.rules li[data-rule]').forEach(function(li){
+    var key=li.getAttribute('data-rule'),ids=RULES[key]||[];ruleName[key]=li.querySelector('b').textContent.replace(/\.$/,'');
+    var b=document.createElement('button');b.type='button';b.className='rule-btn';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','rl-'+key);
+    b.textContent='Shows up in '+(ids.length===1?'one place':ids.length+' places');
+    var box=document.createElement('div');box.className='rule-links';box.id='rl-'+key;box.hidden=true;
+    ids.forEach(function(id){var a=document.createElement('a');a.href='#'+id;a.textContent=SHORT[id];a.addEventListener('click',function(){var el=document.getElementById(id);if(el)setTimeout(function(){flash(el);},350);});box.appendChild(a);});
+    b.addEventListener('click',function(){setRule(key);});
+    li.classList.add('has-links');li.appendChild(b);li.appendChild(box);
+  });
+  Object.keys(SHORT).forEach(function(id){
+    var el=document.getElementById(id);if(!el)return;
+    var keys=Object.keys(RULES).filter(function(k){return RULES[k].indexOf(id)>-1;});if(!keys.length)return;
+    var row=document.createElement('div');row.className='built-by';row.appendChild(document.createTextNode('Built by'));
+    keys.forEach(function(k){var a=document.createElement('a');a.href='#thinking';a.setAttribute('data-rule',k);a.textContent=ruleName[k];
+      a.addEventListener('click',function(ev){ev.preventDefault();if(open!==k)setRule(k);var li=document.querySelector('.rules li[data-rule="'+k+'"]');li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});setTimeout(function(){flash(li);},350);});
+      row.appendChild(a);});
+    var h=el.querySelector('h3'),after=el.classList.contains('item')?h.nextElementSibling:h;after.insertAdjacentElement('afterend',row);
+  });
+
+  /* ---------- section stage ---------- */
+  var stage=document.getElementById('stage');if(!stage)return;
+  var cv=stage.querySelector('canvas'),cap=stage.querySelector('.stage-cap'),ctx=cv.getContext('2d');
+  var W=161,H=196,dpr=Math.min(2,window.devicePixelRatio||1);cv.width=W*dpr;cv.height=H*dpr;
+  var C={},A=1;
+  function readColors(){var cs=getComputedStyle(root);['--pz-accent','--pz-ember','--pz-lilac','--ink','--muted','--line'].forEach(function(v){C[v.replace('--pz-','').replace('--','')]=cs.getPropertyValue(v).trim();});}
+  function rgba(hex,a){var h=hex.replace('#','');if(h.length===3)h=h.replace(/./g,'$&$&');var v=parseInt(h,16);return 'rgba('+(v>>16&255)+','+(v>>8&255)+','+(v&255)+','+Math.max(0,Math.min(1,a*A))+')';}
+  function hash(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+  function dot(x,y,r,c,a){ctx.fillStyle=rgba(c,a==null?1:a);ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.fill();}
+  function glow(x,y,r,c,a){var g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,rgba(c,a));g.addColorStop(1,rgba(c,0));ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2);}
+  function stroke(c,a,w){ctx.strokeStyle=rgba(c,a);ctx.lineWidth=w||1;}
+  function text(s,x,y,c,a){ctx.fillStyle=rgba(c,a);ctx.font='500 8px "IBM Plex Mono", monospace';ctx.textAlign='center';ctx.fillText(s,x,y);}
+  function dust(seed,count,a){for(var i=0;i<count;i++)dot(hash(seed+i)*W,hash(seed+i+50)*H,.6,C.muted,a);}
+
+  var SCENES={
+    thinking:{cap:'Fixed stars',draw:function(t){
+      var S=[[30,42],[80,28],[130,52],[114,100],[62,94],[32,142],[90,156],[134,164]],E=[[0,1],[1,2],[2,3],[3,4],[4,0],[4,5],[5,6],[6,7],[7,3]];
+      dust(10,34,.35);var cyc=t%16;
+      E.forEach(function(e,i){var k=Math.max(0,Math.min(1,cyc-i*.9)),fade=cyc>13?1-(cyc-13)/3:1;if(k<=0)return;var a=S[e[0]],b=S[e[1]];
+        stroke(C.accent,.55*fade,1);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k);ctx.stroke();});
+      S.forEach(function(p,i){var tw=.65+.35*Math.sin(t*1.7+i*1.3);glow(p[0],p[1],11,C.accent,.35*tw);dot(p[0],p[1],1.8+.5*tw,C.accent,1);});
+    }},
+    process:{cap:'The loop',draw:function(t){
+      function P(u){var a=u*6.2832;return [W/2+52*Math.cos(a)+7*Math.sin(3*a),H/2+2+66*Math.sin(a)+5*Math.cos(2*a)];}
+      stroke(C.line,1,2);ctx.beginPath();for(var i=0;i<=120;i++){var p=P(i/120);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);}ctx.stroke();
+      var u=(t/10)%1;
+      for(var j=0;j<30;j++){var uu=u-j*.008;if(uu<0)uu+=1;var q=P(uu);dot(q[0],q[1],2.2*(1-j/30),C.accent,.7*(1-j/30));}
+      for(var s=0;s<5;s++){var us=s/5,since=(u-us+1)%1,lit=Math.max(0,1-since*2.2),q2=P(us);
+        if(lit>0)glow(q2[0],q2[1],12,C.accent,.4*lit);
+        dot(q2[0],q2[1],4.5,C.line,1);dot(q2[0],q2[1],3,lit>0.05?C.accent:C.muted,lit>0.05?.4+.6*lit:.5);
+        text('0'+(s+1),q2[0]+(q2[0]>W/2?14:-14),q2[1]+3,C.ember,.9);}
+      var w=P(u);glow(w[0],w[1],16,C.accent,.55);dot(w[0],w[1],3,C.accent,1);
+    }},
+    work:{cap:'The relay',draw:function(t){
+      var src=[[22,48],[22,98],[22,148]],hub=[78,98],gate=[110,98],dst=[140,48],dst2=[140,98],dst3=[140,148],D=[dst,dst2,dst3];
+      stroke(C.line,1,1.2);ctx.beginPath();src.forEach(function(s){ctx.moveTo(s[0],s[1]);ctx.lineTo(hub[0],hub[1]);});ctx.moveTo(hub[0],hub[1]);ctx.lineTo(gate[0],gate[1]);D.forEach(function(d){ctx.moveTo(gate[0],gate[1]);ctx.lineTo(d[0],d[1]);});ctx.stroke();
+      function lerp(a,b,k){return [a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k];}
+      var gateWait=0;
+      for(var k=Math.floor((t-3.8)/.9);k<=Math.floor(t/.9);k++){if(k<0)continue;var age=t-k*.9,s=src[(k*7)%3],d=D[(k*5+1)%3],write=k%3===0,p,c=write?C.ember:C.lilac;
+        var wait=write?.7:0;
+        if(age<1.1)p=lerp(s,hub,age/1.1);else if(age<1.7)p=lerp(hub,gate,(age-1.1)/.6);else if(age<1.7+wait){p=gate;gateWait=1;}else if(age<2.4+wait){p=lerp(gate,d,(age-1.7-wait)/.7);c=write?C.accent:c;}else if(age<2.9+wait){glow(d[0],d[1],14,write?C.accent:C.lilac,.5*(1-(age-2.4-wait)/.5));continue;}else continue;
+        dot(p[0],p[1],2.4,c,1);}
+      src.forEach(function(s){ctx.fillStyle=rgba(C.muted,.9);ctx.fillRect(s[0]-5,s[1]-5,10,10);});
+      glow(hub[0],hub[1],16,C.accent,.3);dot(hub[0],hub[1],6,C.accent,1);
+      stroke(gateWait?C.ember:C.muted,1,2);ctx.beginPath();ctx.moveTo(gate[0],gate[1]-8);ctx.lineTo(gate[0],gate[1]+8);ctx.stroke();if(gateWait)glow(gate[0],gate[1],12,C.ember,.4);
+      D.forEach(function(d){dot(d[0],d[1],5,C.lilac,.9);});
+      text('systems',22,178,C.muted,.9);text('approve',gate[0],124,C.muted,.9);text('agents',140,178,C.muted,.9);
+    }},
+    projects:{cap:'The living world',draw:function(t){
+      var ph=(t/40)%1,d=.5+.5*Math.sin(ph*6.2832),G=150;
+      var sky=ctx.createLinearGradient(0,0,0,G);sky.addColorStop(0,rgba(C.lilac,.16*d+.03));sky.addColorStop(1,rgba(C.lilac,0));ctx.fillStyle=sky;ctx.fillRect(0,0,W,G);
+      for(var i=0;i<22;i++)dot(hash(i)*W,hash(i+9)*90,.7,C.ink,(1-d)*(.4+.4*Math.sin(t*2+i)));
+      glow(30,34,22,C.ember,.35*d);dot(30,34,6,C.ember,d);
+      dot(130,32,6,C.ink,.85*(1-d));dot(133,30,5.5,C.muted,0);
+      ctx.fillStyle=rgba(C.muted,.16);ctx.beginPath();ctx.moveTo(0,G);ctx.quadraticCurveTo(40,118,80,G-8);ctx.quadraticCurveTo(120,112,W,G-4);ctx.lineTo(W,G);ctx.fill();
+      stroke(C.muted,.7,1);ctx.beginPath();ctx.moveTo(0,G);ctx.lineTo(W,G);ctx.stroke();
+      ctx.fillStyle=rgba(C.muted,.10);ctx.fillRect(0,G,W,H-G);
+      function box(x,y,w,h){ctx.fillStyle=rgba(C.line,1);ctx.fillRect(x,y,w,h);stroke(C.muted,.8,1);ctx.strokeRect(x+.5,y+.5,w-1,h-1);}
+      // house
+      box(10,126,26,24);ctx.fillStyle=rgba(C.muted,.8);ctx.beginPath();ctx.moveTo(7,127);ctx.lineTo(23,113);ctx.lineTo(39,127);ctx.fill();
+      ctx.fillStyle=rgba(C.ember,.15+.8*(1-d));ctx.fillRect(15,132,6,6);if(d<.6)glow(18,135,10,C.ember,.3*(1-d));
+      // forge
+      box(52,124,32,26);ctx.fillStyle=rgba(C.muted,.8);ctx.fillRect(74,108,7,17);
+      var heat=.6+.4*Math.sin(t*5)*Math.sin(t*2.3);glow(64,142,16,C.ember,.45*heat);ctx.fillStyle=rgba(C.ember,.6+.4*heat);ctx.fillRect(58,138,12,10);
+      for(var s=0;s<5;s++){var a=(t*.5+s/5)%1;dot(77.5+Math.sin(t+s*2)*3*a,106-a*30,2+a*3,C.muted,.35*(1-a));}
+      // market
+      box(102,132,34,18);for(var k=0;k<5;k++){ctx.fillStyle=rgba(k%2?C.lilac:C.ink,k%2?.9:.5);ctx.beginPath();ctx.moveTo(100+k*7.6,126);ctx.lineTo(107.6+k*7.6,126);ctx.lineTo(107.6+k*7.6,132);ctx.lineTo(100+k*7.6,132);ctx.fill();}
+      ctx.fillStyle=rgba(C.accent,.8);ctx.fillRect(108,141,6,6);ctx.fillStyle=rgba(C.ember,.7);ctx.fillRect(117,142,6,5);
+      // walkers: a schedule of legs [from,to,start,end] over a period
+      function walker(period,legs,off){var tt=(t+off)%period;for(var i=0;i<legs.length;i++){var L=legs[i];if(tt<L[2])return [L[0],false];if(tt<L[3])return [L[0]+(L[1]-L[0])*(tt-L[2])/(L[3]-L[2]),true];}return [legs[legs.length-1][1],false];}
+      function person(x,moving,c,carry){var y=G-1-(moving?Math.abs(Math.sin(t*9))*1.3:0);stroke(C.ink,.95,1.6);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y-7);ctx.stroke();dot(x,y-9.5,2.4,C.ink,.95);dot(x,y-4,1.6,c,1);if(carry){ctx.fillStyle=rgba(C.ember,.9);ctx.fillRect(x+2,y-9,5,5);}}
+      var smith=walker(18,[[36,60,0,3],[60,36,11,14]],0),atForge=Math.abs(smith[0]-60)<.5;
+      if(atForge){var bt=t%1.2;if(bt<.25)for(var b=0;b<4;b++)dot(66+hash(Math.floor(t/1.2)*4+b)*8,138-bt*30*hash(b+3),1,C.accent,1-bt*4);}
+      person(smith[0],smith[1],C.ember,false);
+      var trader=walker(22,[[118,172,2,9],[172,118,12,19]],5);person(trader[0],trader[1],C.accent,(t+5)%22>12);
+      var walkr=walker(30,[[44,96,0,8],[96,96,8,14],[96,44,14,22]],11);person(walkr[0],walkr[1],C.lilac,false);
+    }},
+    activity:{cap:'Seasons',draw:function(t){
+      var cols=9,rows=7,s=12,g=4,ox=(W-(cols*(s+g)-g))/2,oy=(H-(rows*(s+g)-g))/2-6;
+      for(var c=0;c<cols;c++)for(var r=0;r<rows;r++){var i=c*7+r,v=Math.sin(t*.9-c*.6+hash(i)*2.4)*.5+.5,l=Math.floor(Math.pow(v,1.6)*5);l=Math.min(4,l);if(hash(i+99)<.25)l=0;
+        ctx.fillStyle=l?rgba(C.accent,[0,.26,.5,.75,1][l]):rgba(C.ink,.08);ctx.fillRect(ox+c*(s+g),oy+r*(s+g),s,s);if(l===4)glow(ox+c*(s+g)+s/2,oy+r*(s+g)+s/2,10,C.accent,.25);}
+      text('every square is a day',W/2,H-14,C.muted,.9);
+    }},
+    background:{cap:'The strata',draw:function(t){
+      var lit=Math.floor(t/2.5)%7;
+      for(var i=0;i<7;i++){var base=30+i*22;var on=i===lit;stroke(on?C.accent:C.muted,on?.9:.4,on?1.8:1);ctx.beginPath();
+        for(var x=0;x<=W;x+=4){var y=base+Math.sin(x*.045+t*.35+i*1.1)*5+Math.sin(x*.11-t*.2+i)*2.2;x?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
+        if(on){var gx=(t*30+i*40)%W;glow(gx,base+Math.sin(gx*.045+t*.35+i*1.1)*5,10,C.accent,.4);}}
+    }},
+    contact:{cap:'A light on',draw:function(t){
+      var cx=W/2,cy=88,f=.8+.2*Math.sin(t*3.1)*Math.sin(t*1.7);
+      stroke(C.muted,.8,1);ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,58);ctx.stroke();
+      glow(cx,cy,60*f,C.accent,.22);
+      stroke(C.muted,.9,1.4);ctx.beginPath();ctx.moveTo(cx-10,62);ctx.lineTo(cx+10,62);ctx.lineTo(cx+13,72);ctx.lineTo(cx+13,104);ctx.lineTo(cx-13,104);ctx.lineTo(cx-13,72);ctx.closePath();ctx.stroke();
+      glow(cx,cy,14,C.ember,.7*f);dot(cx,cy+2,3.2,C.accent,f);
+      for(var i=0;i<9;i++){var a=t*(.18+hash(i)*.2)+i*.7,r=34+hash(i+20)*42+Math.sin(t*.5+i)*8,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r*.75,bl=Math.max(0,Math.sin(t*1.3+i*2.1));
+        glow(x,y,7,C.accent,.5*bl);dot(x,y,1.3,C.accent,.3+.7*bl);}
+    }}
+  };
+
+  readColors();
+  addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#theme-toggle'))setTimeout(function(){readColors();if(reduce)paint(performance.now());},0);});
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change',function(){readColors();});
+
+  var cur=null,prev=null,tChange=0,running=false,ease=function(k){return k*k*(3-2*k);};
+  function paint(now){
+    var t=reduce?14:now/1000;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    var k=reduce?1:ease(Math.min(1,(now-tChange)/800));
+    if(prev&&k<1){A=1-k;SCENES[prev].draw(t);}
+    if(cur){A=prev&&k<1?k:1;SCENES[cur].draw(t);}
+    A=1;if(k>=1)prev=null;
+  }
+  function loop(now){paint(now);if(running&&!document.hidden&&stage.classList.contains('show'))requestAnimationFrame(loop);else running=false;}
+  function kick(){if(reduce){paint(performance.now());return;}if(!running){running=true;requestAnimationFrame(loop);}}
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)kick();});
+
+  var hero=document.querySelector('.hero'),foot=document.querySelector('footer'),labels=[].slice.call(document.querySelectorAll('section.block .label'));
+  function place(){
+    var lab=labels[0];if(!lab)return;var r=lab.getBoundingClientRect(),pl=parseFloat(getComputedStyle(lab).paddingLeft)||0;
+    stage.style.left=(r.left+pl)+'px';
+  }
+  function sync(){
+    var a=document.querySelector('header.top nav a[aria-current]'),id=a?a.getAttribute('href').slice(1):null,scene=SCENES[id]?id:null;
+    if(scene&&scene!==cur){prev=cur;cur=scene;tChange=performance.now();cap.style.opacity=0;setTimeout(function(){cap.textContent=SCENES[cur].cap;cap.style.opacity=1;},200);}
+    var sr=stage.getBoundingClientRect(),hr=hero.getBoundingClientRect();
+    stage.classList.toggle('show',!!scene&&hr.bottom<innerHeight*.6);
+    var duck=labels.some(function(l){var r=l.getBoundingClientRect();return r.bottom>sr.top-16&&r.top<sr.bottom+16;})||foot.getBoundingClientRect().top<sr.bottom+16;
+    stage.classList.toggle('duck',duck);
+    kick();
+  }
+  var tk=false;
+  addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(function(){tk=false;sync();});}},{passive:true});
+  addEventListener('resize',function(){place();sync();});
+  document.querySelectorAll('header.top nav a').forEach(function(a){a.addEventListener('click',function(){setTimeout(sync,0);});});
+  place();sync();
 })();
 </script>
 </body>
