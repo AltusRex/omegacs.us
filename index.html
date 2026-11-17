@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joseph Landry · omegacs.us</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Joseph Landry is a systems administrator who uses AI to build tools, agents and home-lab projects that one person usually doesn't get to build.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: one reading column with a mono label gutter on the left, like port labels on a patch panel. */
+:root {
+  --paper: #f2f4f3;
+  --raised: #fafbfa;
+  --ink: #17201c;
+  --muted: #56625c;
+  --line: #d3d9d6;
+  --accent: #2747c8;
+  --accent-soft: #e3e8fb;
+  --ok: #1f7a4a;
+  --warn: #9a5b00;
+  --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111513; --raised: #171c19; --ink: #e4e9e6; --muted: #95a29b; --line: #29312d;
+    --accent: #93a6ff; --accent-soft: #1c2342; --ok: #6cc596; --warn: #e0a75a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111513; --raised: #171c19; --ink: #e4e9e6; --muted: #95a29b; --line: #29312d;
+  --accent: #93a6ff; --accent-soft: #1c2342; --ok: #6cc596; --warn: #e0a75a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 1.0625rem/1.65 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.wrap { max-width: 1040px; margin: 0 auto; }
+
+header.top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-block: 28px 0; font: 500 .8125rem/1 var(--mono); letter-spacing: .04em; color: var(--muted); }
+header.top nav { display: flex; gap: 20px; flex-wrap: wrap; }
+header.top a { color: var(--muted); text-decoration: none; }
+header.top a:hover { color: var(--accent); }
+.mark { color: var(--ink); font-weight: 500; }
+
+.hero { padding-block: clamp(56px, 10vw, 112px) clamp(40px, 7vw, 72px); border-bottom: 1px solid var(--line); }
+.hero h1 {
+  font-family: var(--display); font-weight: 800; font-stretch: 72%;
+  font-size: clamp(2.6rem, 7.4vw, 5.6rem); line-height: .98; letter-spacing: -.01em;
+  margin: 0; max-width: 15ch; text-wrap: balance;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p.lede { margin: 28px 0 0; max-width: 58ch; font-size: 1.1875rem; color: var(--ink); }
+.hero p.lede + p { margin: 14px 0 0; max-width: 58ch; color: var(--muted); }
+
+section.block { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px 40px; padding-block: 56px; border-bottom: 1px solid var(--line); }
+.label { font: 500 .75rem/1.4 var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding-top: 8px; }
+.label span { display: block; color: var(--accent); margin-bottom: 4px; }
+h2 { font-family: var(--display); font-weight: 700; font-stretch: 85%; font-size: clamp(1.6rem, 3.2vw, 2.25rem); line-height: 1.1; margin: 0 0 12px; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 700; font-stretch: 90%; font-size: 1.25rem; line-height: 1.2; margin: 0; }
+.intro { max-width: 62ch; color: var(--muted); margin: 0 0 32px; }
+p { margin: 0; }
+
+/* principles */
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 40px; margin: 0; padding: 0; list-style: none; }
+.rules li { padding-block: 18px; border-top: 1px solid var(--line); display: grid; gap: 4px; }
+.rules b { font-weight: 600; }
+.rules p { color: var(--muted); max-width: 46ch; }
+
+/* process */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; gap: 6px; align-content: start; }
+.steps li::before { content: "0" counter(s); font: 500 .8125rem/1 var(--mono); color: var(--accent); padding-bottom: 10px; border-bottom: 2px solid var(--accent); margin-bottom: 6px; }
+.steps p { color: var(--muted); font-size: .9688rem; }
+
+/* work + projects */
+.items { display: grid; gap: 0; }
+.item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 24px; padding-block: 22px; border-top: 1px solid var(--line); }
+.item:first-child { border-top: 0; padding-top: 0; }
+.item p { grid-column: 1 / -1; color: var(--muted); max-width: 66ch; }
+.item ul { grid-column: 1 / -1; margin: 6px 0 0; padding-left: 1.1em; color: var(--muted); max-width: 66ch; }
+.item ul li { margin-top: 4px; }
+.chip { font: 500 .6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; padding: 6px 8px; border: 1px solid currentColor; border-radius: 3px; align-self: start; white-space: nowrap; }
+.chip.ok { color: var(--ok); } .chip.wip { color: var(--warn); } .chip.use { color: var(--accent); }
+
+.featured { background: var(--raised); border: 1px solid var(--line); border-radius: 6px; padding: 28px; margin-bottom: 28px; display: grid; gap: 14px; }
+.featured .kicker { font: 500 .75rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.featured h3 { font-size: clamp(1.5rem, 3vw, 2rem); font-stretch: 80%; }
+.featured .wt { font: 500 .75rem/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-left: 8px; vertical-align: middle; }
+.featured p { color: var(--ink); max-width: 64ch; }
+.specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; margin: 6px 0 0; }
+.specs div { border-top: 1px solid var(--line); padding-top: 10px; }
+.specs dt { font: 500 .6875rem/1.3 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.specs dd { margin: 4px 0 0; font-size: .9688rem; }
+
+.quote { grid-column: 1 / -1; margin: 14px 0 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--accent); max-width: 62ch; }
+.quote p { color: var(--ink); font-style: italic; }
+.quote cite { display: block; margin-top: 6px; font: 500 .75rem/1.3 var(--mono); font-style: normal; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
+/* background */
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; }
+.grid2 h3 { font-size: 1.0625rem; margin-bottom: 6px; }
+.grid2 p { color: var(--muted); font-size: .9688rem; }
+
+.contact p { max-width: 58ch; }
+.contact .addr { font: 500 1.125rem/1.4 var(--mono); margin-top: 16px; display: inline-block; }
+
+footer { padding-block: 32px 48px; font: 400 .8125rem/1.6 var(--mono); color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 760px) {
+  section.block { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 44px; }
+  .label { padding-top: 0; }
+  .featured { padding: 20px; }
+}
+@media (max-width: 960px) { .steps { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); } }
+@media (max-width: 560px) { .specs, .grid2 { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1, .hero p { animation: rise .6s ease-out both; }
+  .hero p.lede { animation-delay: .08s; } .hero p.lede + p { animation-delay: .14s; }
+  @keyframes rise { from { transform: translateY(8px); } to { transform: none; } }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <span class="mark">Joseph Landry</span>
+  <nav aria-label="Sections">
+    <a href="#thinking">How I think</a>
+    <a href="#work">What I build</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>I use AI to build things <em>one person</em> usually doesn't get to build.</h1>
+  <p class="lede">I'm Joseph Landry, a systems administrator. I write the spec, AI writes most of the code, and I test it until it holds up on real data.</p>
+  <p>Most of what I make starts one of two ways - a process I got tired of doing by hand, or something I care about that's clunky or abandoned and deserves better.</p>
+</section>
+
+<section class="block" id="thinking">
+  <div class="label"><span>01</span>How I think</div>
+  <div>
+    <h2>The rules I build by</h2>
+    <p class="intro">These come from fixing the same problems more than once. They show up in everything I make, from a document generator to a home firewall.</p>
+    <ul class="rules">
+      <li><b>Simple beats clever.</b><p>I'll take a little less automation over a lot more architecture.</p></li>
+      <li><b>Low variance.</b><p>A process should work in almost any environment without per-case tweaking.</p></li>
+      <li><b>Search before you build.</b><p>Reuse what exists. Write something new only when nothing fits.</p></li>
+      <li><b>Nudge, don't block.</b><p>When the data is messy, the tool asks you to fix it instead of refusing to run.</p></li>
+      <li><b>Same input, same output.</b><p>A generated document shouldn't depend on who ran the tool or which AI built it.</p></li>
+      <li><b>Read-only by default.</b><p>Tools look before they touch. Nothing changes until a person says yes.</p></li>
+      <li><b>Accuracy where mistakes are expensive.</b><p>A bad config mapping costs hours of troubleshooting later, so that's where I spend the extra checks.</p></li>
+      <li><b>Built for the next maintainer.</b><p>Documented and structured so another person, or another AI, can pick it up cold.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block" id="process">
+  <div class="label"><span>02</span>How I build</div>
+  <div>
+    <h2>Spec first, then let the machine type</h2>
+    <p class="intro">I'm strongest at logic and at seeing a problem from an odd angle. AI fills the hands-on coding gap. The loop looks like this.</p>
+    <ol class="steps">
+      <li><h3>Find the friction</h3><p>Something takes too long, breaks the same way twice, or nobody has bothered to fix.</p></li>
+      <li><h3>Write the spec</h3><p>What it does, what it must never do, and how I'll know it worked.</p></li>
+      <li><h3>AI builds, I review</h3><p>Agents write the code. I direct, read the diffs and approve.</p></li>
+      <li><h3>Prove it on real data</h3><p>A quick go or no-go test before I sink more time in.</p></li>
+      <li><h3>Ship small, keep patching</h3><p>Other people use it, report what breaks, and I version it forward.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="block" id="work">
+  <div class="label"><span>03</span>What I build</div>
+  <div>
+    <h2>AI tooling for real work</h2>
+    <p class="intro">At my day job I build tools for other technicians and the people they support. The specifics belong to my employer, so this is the shape of the work rather than the details.</p>
+    <div class="items">
+      <div class="item">
+        <h3>Skills that turn a process into a tool</h3><span class="chip use">In daily use</span>
+        <p>Packaged AI skills that draft scopes of work, engineering plans, bills of materials and client status reports. Each one produces the same structure no matter who runs it, and the status reports can run on a schedule as drafts for review.</p>
+      </div>
+      <div class="item">
+        <h3>Connectors that let AI read business systems</h3><span class="chip use">In daily use</span>
+        <p>MCP connectors that give AI read access to the ticketing and documentation systems a tech lives in.</p>
+        <ul>
+          <li>Read-only by default, with per-user keys. Write tools exist but stay off unless someone turns them on.</li>
+          <li>Built by CI and published as releases, so installs update themselves.</li>
+          <li>Sensitive fields are excluded on purpose. The connector reports that a secret exists, never what it is.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <h3>A fleet of single-purpose agents</h3><span class="chip use">Running</span>
+        <p>A set of AI bots where each one has one job - tracking my time, catching messages that slip through, scouting a project before it starts, watching our own tools for known vulnerabilities. An orchestrator bot helps me build and maintain the rest.</p>
+        <ul>
+          <li>A desired-state baseline rebuilds a bot's machine after a wipe, with minimum versions pinned for security.</li>
+          <li>Proposed fixes wait on an approval list until I sign off.</li>
+          <li>Teammates don't need to know which bot does what. One front-door bot routes the request.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <h3>A config migration mapper</h3><span class="chip use">In production</span>
+        <p>Takes one firewall vendor's config export and produces a mapping workbook and a click-path build guide for another. The output is checked three ways - against the target's API schema, against an independent re-read of the export, and with a traffic simulation. Other techs use it on live migrations and I patch it from their reports.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="projects">
+  <div class="label"><span>04</span>Projects</div>
+  <div>
+    <h2>Things I build on my own time</h2>
+    <p class="intro">These are mine, start to finish. They're the ones where I ask "can this be done?" and then go find out.</p>
+
+    <article class="featured">
+      <span class="kicker">Godot 4 · C# · Simulation</span>
+      <h3>A world that doesn't wait for you</h3>
+      <p>My own game, built from the ground up in Godot and C#. It's a life sim and an action RPG at the same time, set in a world that keeps moving whether you show up or not. The rule I wrote down on day one was "choices matter, even when you choose to do nothing."</p>
+      <dl class="specs">
+        <div><dt>Scale</dt><dd>20 system specs, about 1,000 C# files and 120,000 lines, and 200+ test files.</dd></div>
+        <div><dt>Simulation</dt><dd>NPCs physically do the work. Smiths walk to forges, traders haul goods between towns, and the economy comes out of that.</dd></div>
+        <div><dt>One rule for everyone</dt><dd>The player is an NPC with a different input. Same inventory, same needs, same systems, no player-only shortcuts.</dd></div>
+        <div><dt>How I test it</dt><dd>Headless runs of 100+ in-game days, then I read the numbers. One fix cut bad loans by 73% but quietly starved traders of rescue credit. The run caught it before I called it a win.</dd></div>
+      </dl>
+    </article>
+
+    <article class="featured">
+      <span class="kicker">Home lab · OpenWrt · OPNsense</span>
+      <h3>Rewire</h3>
+      <p>Retired Meraki MX64 firewalls are solid hardware that turns into e-waste once the license and support end. Rewire is an OpenWrt package suite that makes them useful again as home-lab gateways, installed on a fresh flash.</p>
+      <dl class="specs">
+        <div><dt>First run</dt><dd>Forces a new password before anything else.</dd></div>
+        <div><dt>Modes</dt><dd>Standard for a quick setup, Advanced for everything.</dd></div>
+        <div><dt>Themes</dt><dd>Selectable UIs, some laid out like vendor dashboards so people can train on them.</dd></div>
+        <div><dt>Next</dt><dd>A native OPNsense plugin with the same experience, then one management layer across gateway, access points and switches.</dd></div>
+      </dl>
+    </article>
+
+    <div class="items">
+      <div class="item">
+        <h3>Debugging the tool that helps AI read my code</h3><span class="chip use">Fixed upstream</span>
+        <p>My game's AI workflow runs on vexp, a context engine that gives coding agents a pre-indexed, ranked view of a codebase so they don't have to grep around and burn tokens. On a 120,000-line C# project it wasn't returning the right context, so I took it apart and worked with its developer directly. Over two days and four releases I sent four reports, each with a repro package and debug traces.</p>
+        <ul>
+          <li><b>Search found no C# code at all.</b> I queried the index database directly to prove the data was there and scoring well, then traced the failure to how the search layer handled C# names like CombatActor. The developer adopted the fallback I suggested - promote strong keyword hits when the semantic score comes back empty - and shipped fixes in the next release.</li>
+          <li><b>The fix worked for some classes and not others.</b> I ran a passing class and two failing ones through the pipeline side by side and showed exactly which step dropped them.</li>
+          <li><b>22,000 call-graph edges were collected but never read.</b> A changelog said this was fixed. The debug trace showed the impact query never touched that table, because the editor and the indexer wrote function names in two different formats.</li>
+          <li><b>A view everyone would read backwards.</b> I documented that the blast-radius section listed what a class calls, not what calls it, so nobody would trust it for the wrong job.</li>
+        </ul>
+        <blockquote class="quote"><p>"This is one of the most useful bug reports we've received... seriously, thank you for the depth here; it made our job easy."</p><cite>Nicola Alessi, vexp developer</cite></blockquote>
+      </div>
+      <div class="item">
+        <h3>A firewall that was holding back</h3><span class="chip ok">Running</span>
+        <p>I rebuilt my home network on a Sophos XGS 116 running OPNsense instead of its stock firmware. Along the way I found its SFP port is 10G-capable hardware that the vendor software limits to 1G. Repurposed consumer routers and spare enterprise switches fill out the rest.</p>
+      </div>
+      <div class="item">
+        <h3>Game preservation</h3><span class="chip wip">In progress</span>
+        <p>Rebuilding games so they keep running on modern systems and work offline. One of them is a game my wife loves but rarely has time for. An offline build means she can pick it up and put it down with no pressure to keep up, and we can still play together over the home network.</p>
+      </div>
+      <div class="item">
+        <h3>MX64 to OpenWrt flash guide</h3><span class="chip ok">Written</span>
+        <p>A lean how-to so someone else can repeat the conversion without me in the room. Only the steps that matter.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="background">
+  <div class="label"><span>05</span>Background</div>
+  <div>
+    <h2>Where the experience comes from</h2>
+    <p class="intro">I run client engagements from scoping through discovery, documentation and deployment.</p>
+    <div class="grid2">
+      <div><h3>Identity and endpoint</h3><p>Entra ID, Intune, Windows 365 and Active Directory. Passwordless rollouts, Cloud PC provisioning, and getting legacy apps to install where they were never meant to.</p></div>
+      <div><h3>Networking</h3><p>Meraki builds and site cutovers, VPN hub designs, and firewall migrations from Sophos, Palo Alto and Fortinet.</p></div>
+      <div><h3>Files and migration</h3><p>SharePoint migrations in both directions, tenant splits, and NAS setups with delta sync and snapshot-based recovery.</p></div>
+      <div><h3>Writing it down</h3><p>Plain-language scopes of work, phase-by-phase work plans, and handoff docs written so the help desk never has to call me.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block contact" id="contact">
+  <div class="label"><span>06</span>Contact</div>
+  <div>
+    <h2>Say hello</h2>
+    <p>If you're working on something that needs a systems person who can also get AI to do the heavy lifting, I'd like to hear about it.</p>
+    <a class="addr" href="mailto:jlandryii@omegacs.us">jlandryii@omegacs.us</a>
+  </div>
+</section>
+
+<footer>
+  <span>Joseph Landry · omegacs.us</span>
+  <span>Built with Claude. Updated November 2026.</span>
+</footer>
+
+</div>
+</body>
+</html>
