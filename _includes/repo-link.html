@@ -1,0 +1,3 @@
+{%- comment -%} A "View on GitHub" link for a project in _data/projects.yml, shown only once its repo is public. Usage: {% include repo-link.html id="rewire" %} {%- endcomment -%}
+{%- assign p = site.data.projects | where: "id", include.id | first -%}
+{%- if p and p.public and p.repo -%}<a class="repo-link" href="{{ p.repo }}" target="_blank" rel="noopener">{% include icon-github.html %}View on GitHub</a>{%- endif -%}

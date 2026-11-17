@@ -1,0 +1,18 @@
+# Checks blog posts and drafts against the house format on every pull request that touches them.
+name: Check posts
+
+on:
+  pull_request:
+    paths: ["_posts/**", "_drafts/**", "scripts/blogpost.py"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check format
+        run: |
+          shopt -s nullglob
+          files=(_posts/*.md _drafts/*.md)
+          if [ ${#files[@]} -eq 0 ]; then echo "no posts"; exit 0; fi
+          python3 scripts/blogpost.py check "${files[@]}"

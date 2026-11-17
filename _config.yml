@@ -1,0 +1,29 @@
+# Jekyll settings for omegacs.us. GitHub Pages builds the site from this branch automatically.
+title: Joseph Landry
+description: Systems administrator who uses AI to build tools, agents and home-lab projects that one person usually doesn't get to build.
+url: https://omegacs.us
+author: Joseph Landry
+lang: en
+
+permalink: /blog/:title/
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    disable: true
+
+plugins:
+  - jekyll-feed
+feed:
+  path: blog/feed.xml
+
+defaults:
+  - scope: { path: "", type: posts }
+    values: { layout: post, nav: blog }
+
+exclude:
+  - README.md
+  - scripts
+  - Gemfile
+  - Gemfile.lock
+  - vendor

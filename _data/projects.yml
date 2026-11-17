@@ -1,0 +1,39 @@
+# The portfolio page and the landing page both read this list.
+# Set public: true (and a repo URL) once a repository is public; the "View on GitHub" link appears on both pages.
+# Order here is the order on the portfolio page.
+
+- id: game
+  name: A world that doesn't wait for you
+  kicker: Godot 4 · C# · Simulation
+  summary: My own life sim and action RPG, where NPCs physically do the work and the economy comes out of that. About 120,000 lines across 20 system specs, tested with headless runs of 100+ in-game days.
+  status: In progress
+  chip: wip
+  public: false
+  repo:
+
+- id: rewire
+  name: Rewire
+  kicker: OpenWrt · OPNsense · Home lab
+  summary: An OpenWrt package suite that turns retired Meraki MX64 firewalls into useful home-lab gateways, with a forced first-run password, Standard and Advanced modes, and selectable dashboards.
+  status: In progress
+  chip: wip
+  public: false
+  repo:
+
+- id: flash-guide
+  name: MX64 to OpenWrt flash guide
+  kicker: Guide · Home lab
+  summary: A lean how-to so someone else can repeat the conversion without me in the room. Only the steps that matter.
+  status: Written
+  chip: ok
+  public: false
+  repo:
+
+- id: site
+  name: omegacs.us
+  kicker: HTML · CSS · Jekyll · GitHub Actions
+  summary: This site. Plain static pages on GitHub Pages, a nightly job that refreshes the activity grid, and a background scene for each section of the home page.
+  status: Live
+  chip: ok
+  public: true
+  repo: https://github.com/AltusRex/omegacs.us
