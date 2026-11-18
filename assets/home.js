@@ -19,8 +19,12 @@
     if(lock)active=lock;
     setActive(active);
     if(rail)rail.classList.toggle('away',hero&&hero.getBoundingClientRect().bottom>vh*0.5);
+    /* small screens: the floating index tucks away while reading down and comes back on the way up or at the end */
+    if(rail){var y=scrollY,atEnd=y+vh>=document.documentElement.scrollHeight-4;
+      if(wide()||atEnd||y<lastY-8)rail.classList.remove('tuck');else if(y>lastY+8&&!rail.classList.contains('open'))rail.classList.add('tuck');
+      if(Math.abs(y-lastY)>8)lastY=y;}
   }
-  var ticking=false;
+  var ticking=false,lastY=scrollY;
   addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(function(){ticking=false;update();});}},{passive:true});
   addEventListener('resize',update);
   /* a click on the index highlights that section right away, even if it is too short to reach the line */
