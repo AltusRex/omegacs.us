@@ -51,7 +51,8 @@ header.top {
 }
 .mark { color: var(--ink); font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
 .mark .omega { color: var(--pz-accent); flex: none; filter: drop-shadow(0 0 calc(var(--glow-size) * .6) var(--glow)); }
-.foot-mark { display: inline-flex; align-items: center; gap: 8px; }
+.foot-mark { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.foot-mark > span, .foot-mark > a { white-space: nowrap; }
 .foot-mark .omega { color: var(--pz-accent); flex: none; }
 header.top nav { display: flex; gap: 4px; flex-wrap: wrap; }
 header.top nav a { color: var(--muted); text-decoration: none; padding: 7px 9px; border-radius: 5px; transition: color .2s, background-color .2s; }
