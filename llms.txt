@@ -34,3 +34,7 @@ Entra ID, Intune, Windows 365, Active Directory, Meraki, firewall migrations, Sh
 ## Elsewhere
 - GitHub: https://github.com/AltusRex
 - LinkedIn: https://www.linkedin.com/in/joseph-landry-ii/
+- Twitch: https://www.twitch.tv/altusrex
+- World Anvil: https://www.worldanvil.com/~AltusRex
+- ToME (te4.org): https://te4.org/users/altusrex
+- CurseForge: https://www.curseforge.com/members/altusrex/projects
