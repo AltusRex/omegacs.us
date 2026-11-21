@@ -30,3 +30,7 @@ Entra ID, Intune, Windows 365, Active Directory, Meraki, firewall migrations, Sh
 - Portfolio (projects, with links to public repos): https://omegacs.us/portfolio/
 - Blog: https://omegacs.us/blog/ (feed: https://omegacs.us/blog/feed.xml)
 - Contact: jlandryii@omegacs.us
+
+## Elsewhere
+- GitHub: https://github.com/AltusRex
+- LinkedIn: https://www.linkedin.com/in/joseph-landry-ii/

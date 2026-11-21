@@ -226,6 +226,7 @@ html:not(.js) .backdrop { display: none; }
 @media (max-width: 600px) { .hide-sm { display: none; } }
 @media (max-width: 520px) { header.top { gap: 8px; flex-wrap: nowrap; } header.top nav { flex-wrap: nowrap; } header.top nav a { padding: 7px 7px; } .mark-name { display: none; } }
 @media (max-width: 360px) { header.top { gap: 4px; } header.top nav { gap: 0; } header.top nav a { padding: 7px 5px; letter-spacing: 0; } .tools { gap: 4px; } .icon-btn { padding: 0 7px; } }
+@media (max-width: 319px) { .li-btn { display: none; } }
 
 /* touch screens: give small inline links a finger-sized hit area without changing the layout */
 @media (pointer: coarse) {
